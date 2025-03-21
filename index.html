@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobi-comm | Mobile Recharge & Services</title>
+    <link rel="icon" type="image/x-icon" href="./titlelogo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #4cc9f0;
+            --dark: #212529;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --success: #4BB543;
+            --danger: #dc3545;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 12px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 50px;
+            margin-right: 10px;
+            background-color: blue;
+            border-radius: 40px;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 0;
+        }
+        
+        .navbar {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .navbar a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        .navbar a:hover {
+            color: var(--primary);
+        }
+        
+        .navbar a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s;
+        }
+        
+        .navbar a:hover::after {
+            width: 100%;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark);
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 40px 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%);
+        }
+        
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+        }
+        
+        .hero-text {
+            flex: 1;
+        }
+        
+        .hero-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+            line-height: 1.2;
+        }
+        
+        .hero-text p {
+            color: var(--gray);
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+        
+        .hero-image {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        
+        /* Recharge Card */
+        .recharge-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin: -60px auto 40px;
+            max-width: 600px;
+            box-shadow: var(--shadow);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .recharge-card h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+        
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid var(--light-gray);
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            outline: none;
+        }
+        
+        .input-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .input-group .icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+        
+        .input-group.icon-left input {
+            padding-left: 45px;
+        }
+        
+        .input-error {
+            color: var(--danger);
+            font-size: 0.85rem;
+            margin-top: 5px;
+            margin-left: 15px;
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+        }
+        #rechargeButton{
+            width: 230px;
+        }
+        /* Features Section */
+        .features {
+            padding: 60px 0;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-header h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        .section-header p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-icon {
+            height: 60px;
+            width: 60px;
+            background: rgba(67, 97, 238, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .feature-icon i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .feature-card p {
+            color: var(--gray);
+        }
+        
+        /* Plans Section */
+        .plans {
+            padding: 60px 0;
+            background: linear-gradient(135deg, #e4e7eb 0%, #f5f7fa 100%);
+        }
+        
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .plan-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+        
+        .plan-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .plan-header {
+            padding: 20px;
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+        
+        .plan-price {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        
+        .plan-price span {
+            font-size: 1rem;
+            font-weight: 400;
+        }
+        
+        .plan-features {
+            padding: 20px;
+        }
+        
+        .plan-features ul {
+            list-style: none;
+        }
+        
+        .plan-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+        
+        .plan-features i {
+            color: var(--success);
+            margin-right: 10px;
+        }
+        
+        .plan-footer {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        /* App Download Section */
+        .app-download {
+            padding: 80px 0;
+            background: white;
+        }
+        
+        .app-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 50px;
+        }
+        
+        .app-text {
+            flex: 1;
+        }
+        
+        .app-text h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .app-text p {
+            color: var(--gray);
+            margin-bottom: 30px;
+        }
+        
+        .app-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .app-store-btn {
+            background: var(--dark);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .app-store-btn:hover {
+            background: black;
+            transform: translateY(-3px);
+        }
+        
+        .app-store-btn .icon {
+            font-size: 1.8rem;
+        }
+        
+        .app-store-btn .text {
+            line-height: 1.2;
+        }
+        
+        .app-store-btn .small-text {
+            font-size: 0.7rem;
+        }
+        
+        .app-store-btn .big-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .app-image {
+            flex: 1;
+        }
+        
+        .app-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 40px;
+            height: 2px;
+            background: var(--primary);
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column ul a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column ul a:hover {
+            color: white;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #adb5bd;
+        }
+        
+        /* Scroll to top button */
+        #scrollTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            height: 45px;
+            width: 45px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.4);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 99;
+        }
+        
+        #scrollTopBtn.show {
+            opacity: 1;
+        }
+        
+        #scrollTopBtn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-5px);
+        }
+        
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+        
+        .loading-logo {
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        /* Dropdown Styles */
+        .dropdown-menu {
+            min-width: 150px;
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 10px 15px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .dropdown-item:hover {
+            background: var(--light-gray);
+            color: var(--primary);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .hero-text {
+                order: 2;
+            }
+            
+            .hero-image {
+                order: 1;
+                margin-bottom: 30px;
+            }
+            
+            .app-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .app-text {
+                order: 2;
+            }
+            
+            .app-image {
+                order: 1;
+                margin-bottom: 30px;
+            }
+            
+            .app-buttons {
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 15px;
+            }
+            
+            .navbar {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 70px);
+                background: white;
+                flex-direction: column;
+                padding: 40px 20px;
+                box-shadow: var(--shadow);
+                transition: left 0.3s;
+                gap: 30px;
+            }
+            
+            .navbar.active {
+                left: 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .auth-buttons {
+                display: flex;
+                margin-top: 20px;
+            }
+            
+            .hero-text h2 {
+                font-size: 2rem;
+            }
+            
+            .recharge-card {
+                margin-top: 20px;
+                padding: 20px;
+            }
+            
+            .features-grid, .plans-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loading-logo">
+            <img src="./Assets/logo-removebg-preview.png" alt="Mobi-comm Logo" width="150">
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="./Assets/logo-removebg-preview.png" alt="Mobi-comm Logo">
+                <h1>Mobi-comm</h1>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav class="navbar" id="navbar">
+                <a href="#recharge">Recharge</a>
+                <a href="NewSimRegistration.html">New Connection</a>
+                <a href="plansview.html">Plans & Offers</a>
+                <a href="Help.html">Support</a>
+                <div class="auth-buttons">
+                    <div class="login-container" style="position: relative;">
+                        <button class="btn btn-outline" id="loginBtn">Login</button>
+                        <div id="loginDropdown" class="dropdown-menu" style="display: none; position: absolute; top: 100%; left: 0; background: white; border-radius: 8px; box-shadow: var(--shadow); z-index: 100;">
+                            <a href="./Subscriber/user-loginpage.html" class="dropdown-item">User Login</a>
+                            <a href="./Admin/admin-loginpage.html" class="dropdown-item">Admin Login</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h2>Fast & Secure Mobile Recharges</h2>
+                <p>Recharge your prepaid mobile in seconds with Mobi-comm and enjoy a hassle-free experience with our user-friendly platform. </p>
+                <a href="#recharge" style="text-decoration: none;" class="btn btn-primary">Recharge Now</a>
+            </div>
+            <div class="hero-image">
+                <img src="./Assets/family.png" alt="Mobile Payment">
+            </div>
+        </div>
+    </section>
+
+    <!-- Recharge Card -->
+    <section id="recharge" class="container">
+        <div class="recharge-card">
+            <h3>Quick Recharge</h3>
+            <div class="input-group icon-left">
+                <i class="fas fa-mobile-alt icon" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%);"></i>
+                <input type="text" id="mobileNumber" placeholder="Enter 10-digit mobile number" maxlength="10" inputmode="numeric" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                <i class="fas fa-check success-icon" id="successIcon" style="display: none; color: var(--success); position: absolute; right: 15px; top: 50%; transform: translateY(-50%);"></i>
+                <div id="mobileNumberError" class="input-error"></div>
+            </div>
+            <button id="rechargeButton" class="btn btn-primary btn-block" disabled>View Plans & Recharge</button>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Choose Mobi-comm</h2>
+                <p>Experience the best-in-class services designed for your convenience</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="0">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Instant Recharges</h3>
+                    <p>Recharge your mobile in seconds with our fast and secure payment gateway</p>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <h3>Exclusive Offers</h3>
+                    <p>Get access to exclusive offers, cashbacks and discounts on every recharge</p>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Secure Payments</h3>
+                    <p>Your transactions are secured with bank-grade encryption and security</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Plans Section -->
+    <section class="plans">
+        <div class="container">
+            <div class="section-header">
+                <h2>Popular Recharge Plans</h2>
+                <p>Find the perfect plan for your needs</p>
+            </div>
+            
+            <div class="plans-grid">
+                <div class="plan-card" data-aos="fade-up" data-aos-delay="0">
+                    <div class="plan-header">
+                        <h3>Basic</h3>
+                        <div class="plan-price">₹149<span>/month</span></div>
+                    </div>
+                    <div class="plan-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> 1.5GB Daily Data</li>
+                            <li><i class="fas fa-check"></i> Unlimited Calls</li>
+                            <li><i class="fas fa-check"></i> 100 SMS/day</li>
+                            <li><i class="fas fa-check"></i> 28 Days Validity</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="plan-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="plan-header">
+                        <h3>Standard</h3>
+                        <div class="plan-price">₹249<span>/month</span></div>
+                    </div>
+                    <div class="plan-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> 2GB Daily Data</li>
+                            <li><i class="fas fa-check"></i> Unlimited Calls</li>
+                            <li><i class="fas fa-check"></i> 100 SMS/day</li>
+                            <li><i class="fas fa-check"></i> 28 Days Validity</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="plan-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="plan-header">
+                        <h3>Premium</h3>
+                        <div class="plan-price">₹599<span>/3 months</span></div>
+                    </div>
+                    <div class="plan-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> 2.5GB Daily Data</li>
+                            <li><i class="fas fa-check"></i> Unlimited Calls</li>
+                            <li><i class="fas fa-check"></i> 100 SMS/day</li>
+                            <li><i class="fas fa-check"></i> 84 Days Validity</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- App Download Section -->
+    <section class="app-download">
+        <div class="container app-content">
+            <div class="app-text">
+                <h2>Get Our Mobile App</h2>
+                <p>Download the Mobi-comm app for faster recharges, exclusive mobile-only offers, and better management of your services.</p>
+                <div class="app-buttons">
+                    <a href="#" class="app-store-btn">
+                        <div class="icon"><i class="fab fa-google-play"></i></div>
+                        <div class="text">
+                            <div class="small-text">GET IT ON</div>
+                            <div class="big-text">Google Play</div>
+                        </div>
+                    </a>
+                    <a href="#" class="app-store-btn">
+                        <div class="icon"><i class="fab fa-apple"></i></div>
+                        <div class="text">
+                            <div class="small-text">DOWNLOAD ON THE</div>
+                            <div class="big-text">App Store</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="app-image">
+                <img src="./Assets/woman payment.png" alt="Mobile App">
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="AboutUs.html">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="TermsAndCondition.html">Terms & Conditions</a></li>
+                        <li><a href="PrivacyPolicy.html">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#recharge">Mobile Recharge</a></li>
+                        <li><a href="plansview.html">View Plans</a></li>
+                        <li><a href="NewSimRegistration.html">New Connection</a></li>
+                        <li><a href="InternationalRoaming.html">International Roaming</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="Help.html">Help Center</a></li>
+                        <li><a href="Feedback.html">Feedback</a></li>
+                        <li><a href="ContactUs.html">Contact Us</a></li>
+                        <li><a href="#">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Connect With Us</h3>
+                    <p>Stay updated with our latest offers and news</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 Mobi-comm. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollTopBtn"><i class="fas fa-arrow-up"></i></button>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 100,
+            once: true
+        });
+
+        // Mobile menu toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            const navbar = document.getElementById('navbar');
+            navbar.classList.toggle('active');
+            this.innerHTML = navbar.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+
+        // Login dropdown toggle
+        const loginBtn = document.getElementById('loginBtn');
+        const loginDropdown = document.getElementById('loginDropdown');
+        loginBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            loginDropdown.style.display = loginDropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!loginBtn.contains(e.target) && !loginDropdown.contains(e.target)) {
+                loginDropdown.style.display = 'none';
+            }
+        });
+
+        // Mobile number validation
+        const mobileNumberInput = document.getElementById('mobileNumber');
+        const rechargeButton = document.getElementById('rechargeButton');
+        const mobileNumberError = document.getElementById('mobileNumberError');
+        const successIcon = document.getElementById('successIcon');
+
+        mobileNumberInput.addEventListener('input', function() {
+            const mobileNumber = mobileNumberInput.value.trim();
+            
+            if (!/^\d*$/.test(mobileNumber)) {
+                mobileNumberInput.value = mobileNumber.replace(/\D/g, '');
+                return;
+            }
+
+            if (mobileNumber.length > 0) {
+                const firstDigit = mobileNumber.charAt(0);
+                if (!['6', '7', '8', '9'].includes(firstDigit)) {
+                    mobileNumberError.textContent = '**Number must start with 6, 7, 8, or 9.**';
+                    rechargeButton.disabled = true;
+                    successIcon.style.display = 'none';
+                } else if (mobileNumber.length < 10) {
+                    mobileNumberError.textContent = '**Please enter exactly 10 digits.**';
+                    rechargeButton.disabled = true;
+                    successIcon.style.display = 'none';
+                } else if (mobileNumber.length === 10) {
+                    mobileNumberError.textContent = '';
+                    rechargeButton.disabled = false;
+                    successIcon.style.display = 'block';
+                }
+            } else {
+                mobileNumberError.textContent = '';
+                rechargeButton.disabled = true;
+                successIcon.style.display = 'none';
+            }
+        });
+
+        mobileNumberInput.addEventListener('paste', function(e) {
+            const pastedData = (e.clipboardData || window.clipboardData).getData('text');
+            if (!/^\d*$/.test(pastedData)) {
+                e.preventDefault();
+            }
+        });
+
+      rechargeButton.addEventListener('click', function() {
+    const mobileNumber = mobileNumberInput.value.trim();
+    fetch(`http://localhost:8082/api/recharge/validate?mobileNumber=${mobileNumber}`)
+        .then(response => {
+            if (response.ok) {
+                return response.text();
+            } else {
+                throw new Error('Invalid or unregistered mobile number');
+            }
+        })
+        .then(message => {
+            console.log(message);
+            window.location.href = `/Subscriber/user-rechargepage.html?mobile=${mobileNumber}`;
+        })
+        .catch(error => {
+            mobileNumberError.textContent = error.message;
+        });
+});
+        // Loading screen animation
+        window.addEventListener('load', function() {
+            const loadingScreen = document.querySelector('.loading-screen');
+            if (loadingScreen) {
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 3500);
+            }
+        });
+
+        // Scroll to top button visibility
+        window.onscroll = function() {
+            const scrollTopBtn = document.getElementById("scrollTopBtn");
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                scrollTopBtn.classList.add('show');
+            } else {
+                scrollTopBtn.classList.remove('show');
+            }
+        };
+
+        // Scroll to top functionality
+        document.getElementById("scrollTopBtn").addEventListener("click", function() {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
+    </script>
+</body>
+</html>

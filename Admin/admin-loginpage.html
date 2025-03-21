@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Mobi-comm</title>
+    <link rel="icon" type="image/x-icon" href="../titlelogo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <style>
+        /* Your existing styles */
+                        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap'); :root { --primary: #4361ee; --primary-dark: #3a56d4; --secondary: #4cc9f0; --dark: #212529; --light: #f8f9fa; --gray: #6c757d; --light-gray: #e9ecef; --success: #4BB543; --danger: #dc3545; --shadow: 0 4px 6px rgba(0, 0, 0, 0.1); --border-radius: 12px; } * { box-sizing: border-box; margin: 0; padding: 0; } body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #e4e7eb, #f5f7fa); min-height: 100vh; display: flex; flex-direction: column; position: relative; overflow: hidden; } /* Wave Animation */ .wave { position: absolute; bottom: 0; left: 0; width: 100%; height: 150px; background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"%3E%3Cpath fill="%234361ee" fill-opacity="0.2" d="M0,128L48,144C96,160,192,192,288,192C384,192,480,160,576,144C672,128,768,128,864,128C960,128,1056,128,1152,128C1248,128,1344,128,1392,128L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"%3E%3C/path%3E%3C/svg%3E'); animation: wave 7s ease-in-out infinite; z-index: -1; } .wave:nth-child(2) { background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"%3E%3Cpath fill="%234cc9f0" fill-opacity="0.2" d="M0,160L48,176C96,192,192,224,288,224C384,224,480,192,576,176C672,160,768,160,864,160C960,160,1056,160,1152,160C1248,160,1344,160,1392,160L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"%3E%3C/path%3E%3C/svg%3E'); animation: wave 7s ease-in-out infinite 1.5s; } @keyframes wave { 0% { transform: translateY(0); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0); } } /* Floating Particles */ .particle { position: absolute; border-radius: 50%; background: rgba(67, 97, 238, 0.6); animation: float 10s ease-in-out infinite; z-index: -1; } @keyframes float { 0% { transform: translateY(0) scale(1); opacity: 0.6; } 50% { transform: translateY(-50px) scale(1.2); opacity: 0.8; } 100% { transform: translateY(0) scale(1); opacity: 0.6; } } /* Header Styles */ header { background-color: white; box-shadow: var(--shadow); position: sticky; top: 0; z-index: 100; padding: 15px 20px; } .header-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; } .logo-container { display: flex; align-items: center; gap: 10px; } .logo img { height: 50px; border-radius: 40px; background-color: blue; } .company-name { font-size: 1.5rem; font-weight: 600; color: var(--primary); } /* Main Content Styles */ .container { display: flex; align-items: center; justify-content: center; padding: 40px 20px; flex: 1; } .screen { background: white; border-radius: var(--border-radius); box-shadow: var(--shadow); width: 90%; max-width: 500px; position: relative; z-index: 1; animation: slideUp 0.8s ease forwards; text-align: center; padding: 40px; } .screen h2 { color: var(--primary); font-size: 1.8rem; margin-bottom: 20px; } @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } .screen__content { position: relative; z-index: 1; } .login { width: 100%; padding-top: 20px; } .login__field { padding: 15px 0; position: relative; animation: fadeIn 0.5s ease forwards; animation-delay: calc(var(--order) * 0.1s); } .login__field:nth-child(1) { --order: 1; } .login__field:nth-child(2) { --order: 2; } @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } .login__icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gray); } .login__input { width: 100%; padding: 12px 15px 12px 45px; border: 2px solid var(--light-gray); border-radius: 50px; font-size: 1rem; font-family: 'Poppins', sans-serif; font-weight: 400; transition: all 0.3s; outline: none; background: var(--light); color: var(--dark); } .login__input::placeholder { color: var(--gray); font-family: 'Poppins', sans-serif; font-weight: 400; } .login__input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2); } .login__submit { background: var(--primary); font-size: 14px; margin-top: 30px; padding: 12px 20px; border-radius: 50px; border: none; font-family: 'Poppins', sans-serif; font-weight: 500; display: flex; align-items: center; width: 100%; color: white; cursor: pointer; transition: all 0.3s ease; animation: bounceIn 0.5s ease 0.7s forwards; box-shadow: 0 5px 15px rgba(67, 97, 238, 0.2); } @keyframes bounceIn { 0% { transform: scale(0.9); opacity: 0; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); } } .login__submit:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3); } .login__submit:active { transform: translateY(1px); } .button__icon { font-size: 20px; margin-left: auto; color: inherit; transition: transform 0.3s ease; } .login__submit:hover .button__icon { transform: translateX(5px); } /* Modal Styles */ .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); align-items: center; justify-content: center; } .modal-content { background: white; border-radius: var(--border-radius); padding: 20px; text-align: center; max-width: 400px; width: 90%; box-shadow: var(--shadow); animation: fadeIn 0.3s ease forwards; } .modal-content h2 { color: var(--primary); margin-bottom: 15px; } .modal-content p { color: var(--dark); margin-bottom: 20px; } .modal-content button { background: var(--primary); color: white; padding: 10px 20px; border-radius: 50px; border: none; cursor: pointer; transition: all 0.3s; } .modal-content button:hover { background: var(--primary-dark); } /* Responsive Design */ @media (max-width: 768px) { .header-content { flex-direction: column; align-items: flex-start; } .company-name { margin-bottom: 10px; } } @media (max-width: 480px) { .screen { width: 100%; max-width: none; padding: 20px; } .screen h2 { font-size: 1.5rem; } .login__input { font-size: 14px; padding: 10px 15px 10px 40px; } .login__icon { font-size: 16px; } .login__submit { font-size: 12px; padding: 10px; } }
+
+    </style>
+</head>
+<body>
+    <div class="wave"></div>
+    <div class="wave"></div>
+
+    <header>
+        <div class="header-content">
+            <div class="logo-container">
+                <div class="logo">
+                    <a href="../index.html"><img src="../Assets/logo-removebg-preview.png" alt="Company Logo"></a>
+                </div>
+                <span class="company-name">Mobi-comm</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="screen" data-aos="fade-up">
+            <h2>Admin Login</h2>
+            <div class="screen__content">
+                <form class="login" id="loginForm">
+                    <div class="login__field">
+                        <i class="login__icon fas fa-user"></i>
+                        <input type="text" id="adminId" name="username" class="login__input" placeholder="Admin ID" required>
+                    </div>
+                    <div class="login__field">
+                        <i class="login__icon fas fa-lock"></i>
+                        <input type="password" id="password" name="password" class="login__input" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="login__submit">
+                        <span class="button__text">Log In</span>
+                        <i class="button__icon fas fa-chevron-right"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <h2>Error</h2>
+            <p id="modalMessage"></p>
+            <button onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        // Generate Floating Particles
+        function createParticles() {
+            const particleCount = 30;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${Math.random() * 100}vh`;
+                particle.style.width = `${Math.random() * 5 + 2}px`;
+                particle.style.height = particle.style.width;
+                particle.style.animationDuration = `${Math.random() * 8 + 6}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                document.body.appendChild(particle);
+            }
+        }
+
+        createParticles();
+
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+
+        // Handle form submission
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const username = document.getElementById('adminId').value;
+    const password = document.getElementById('password').value;
+    const userData = { username, password };
+
+    fetch('http://localhost:8082/api/login', { // Or http://127.0.0.1:8082
+    method: 'POST',
+    body: JSON.stringify(userData),
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include'
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+})
+.then(data => {
+    console.log('Response data:', data);
+    if (data.message === "Login successful") {
+        window.location.href = 'admin-homepage.html';
+    } else {
+        showModal(data.message);
+    }
+})
+.catch(error => {
+    showModal('Credentials mismatch or an error occurred during login');
+    console.error('Fetch Error:', error.message);
+});
+});
+
+        // Show Modal on Error or Logout
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('error')) {
+                showModal('Invalid Admin ID or Password');
+            } else if (urlParams.has('logout')) {
+                showModal('You have been logged out successfully');
+            }
+        };
+
+        function showModal(message) {
+            const modal = document.getElementById('errorModal');
+            const modalMessage = document.getElementById('modalMessage');
+            modalMessage.textContent = message;
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('errorModal');
+            modal.style.display = 'none';
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('errorModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+    </script>
+</body>
+</html>

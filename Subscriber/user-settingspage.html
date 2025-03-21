@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobi-Comm Settings</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Raleway:400,700');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Raleway, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #ffffff;
+            padding: 10px 20px;
+            border-bottom: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: #0077cc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .company-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #0077cc;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 5px 10px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-item:hover {
+            color: #0077cc;
+        }
+
+        .nav-item.active {
+            color: #0077cc;
+            font-weight: bold;
+            border-bottom: 2px solid #0077cc;
+        }
+
+        .breadcrumbs {
+            max-width: 1200px;
+            margin: 1.5rem auto;
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .breadcrumbs a {
+            color: #0077cc;
+            text-decoration: none;
+        }
+
+        .breadcrumbs a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumbs i {
+            margin: 0 8px;
+            color: #666;
+        }
+
+        .settings-container {
+            max-width: 900px;
+            margin: 2.5rem auto;
+            padding: 2.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .settings-header {
+            font-size: 24px;
+            color: #0077cc;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .settings-section {
+            margin-bottom: 30px;
+        }
+
+        .settings-section h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #0077cc;
+        }
+
+        .setting-item {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: #f8f9ff;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .setting-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .setting-label {
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            font-size: 1rem;
+        }
+
+        .setting-input, .setting-select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+            background: white;
+        }
+
+        .setting-input:focus, .setting-select:focus {
+            outline: none;
+            border-color: #0077cc;
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .toggle-switch {
+            width: 3.8rem;
+            height: 2rem;
+            background: #ddd;
+            border-radius: 2rem;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #0077cc;
+        }
+
+        .toggle-slider {
+            width: 1.6rem;
+            height: 1.6rem;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 0.2rem;
+            left: 0.2rem;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(1.9rem);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 2.5rem;
+        }
+
+        .save-button, .reset-button {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .save-button {
+            background: #0077cc;
+            color: white;
+        }
+
+        .reset-button {
+            background: white;
+            color: #0077cc;
+            border: 2px solid #0077cc;
+        }
+
+        .save-button:hover, .reset-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .save-button:hover {
+            background: #005fa3;
+        }
+
+        .reset-button:hover {
+            background: #f8f9ff;
+        }
+
+        @media (max-width: 1024px) {
+            .settings-container {
+                max-width: 700px;
+                margin: 30px auto;
+                padding: 2rem;
+            }
+
+            .button-group {
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .settings-container {
+                max-width: 600px;
+                margin: 20px auto;
+                padding: 1.5rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-links {
+                flex-direction: row;
+                gap: 10px;
+                justify-content: center;
+            }
+
+            .settings-header {
+                font-size: 20px;
+            }
+
+            .settings-section h3 {
+                font-size: 16px;
+            }
+
+            .setting-label {
+                font-size: 14px;
+            }
+
+            .setting-input, .setting-select {
+                padding: 10px;
+                font-size: 12px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .save-button, .reset-button {
+                width: 100%;
+                font-size: 14px;
+                padding: 12px 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .settings-container {
+                max-width: 100%;
+                margin: 15px auto;
+                padding: 1rem;
+                border-radius: 8px;
+            }
+
+            .header {
+                padding: 10px;
+            }
+
+            .logo {
+                width: 30px;
+                height: 30px;
+            }
+
+            .company-name {
+                font-size: 1rem;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+
+            .nav-item {
+                font-size: 12px;
+                padding: 3px 8px;
+            }
+
+            .breadcrumbs {
+                font-size: 12px;
+                margin-bottom: 15px;
+                margin-left: 10px;
+            }
+
+            .breadcrumbs i {
+                margin: 0 5px;
+            }
+
+            .settings-header {
+                font-size: 18px;
+                margin-bottom: 20px;
+            }
+
+            .settings-section {
+                margin-bottom: 20px;
+            }
+
+            .settings-section h3 {
+                font-size: 14px;
+                margin-bottom: 15px;
+            }
+
+            .setting-item {
+                margin: 1rem 0;
+                padding: 1rem;
+            }
+
+            .setting-label {
+                font-size: 12px;
+            }
+
+            .setting-input, .setting-select {
+                padding: 8px;
+                font-size: 12px;
+            }
+
+            .toggle-switch {
+                width: 3rem;
+                height: 1.6rem;
+            }
+
+            .toggle-slider {
+                width: 1.2rem;
+                height: 1.2rem;
+                top: 0.2rem;
+                left: 0.2rem;
+            }
+
+            .toggle-switch.active .toggle-slider {
+                transform: translateX(1.4rem);
+            }
+
+            .save-button, .reset-button {
+                font-size: 12px;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-container">
+                <div class="logo">
+                    <a href="user-homepage.html"><img src="C:\Users\FQ5330TU\OneDrive\Desktop\MobilePrepaid\Assets\logo-removebg-preview.png" alt="Company Logo" width="40" height="40"></a>
+                </div>
+                <span class="company-name">Mobi-Comm</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#" class="nav-item">Support</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="breadcrumbs">
+        <a href="user-homepage.html"><i class="fas fa-chevron-left"></i></a> 
+        Home <i class="fas fa-chevron-right"></i> Settings
+    </div>
+
+    <div class="settings-container">
+        <h2 class="settings-header">Account Settings</h2>
+
+        <div class="settings-section">
+            <h3>Profile Information</h3>
+            <div class="setting-item">
+                <label class="setting-label"><i class="fas fa-user"></i> Full Name</label>
+                <input type="text" class="setting-input" id="fullName" placeholder="Enter your full name">
+            </div>
+            <div class="setting-item">
+                <label class="setting-label"><i class="fas fa-envelope"></i> Email Address</label>
+                <input type="email" class="setting-input" id="emailAddress" placeholder="Enter your email">
+            </div>
+            <div class="setting-item">
+                <label class="setting-label"><i class="fas fa-phone"></i> Phone Number</label>
+                <input type="tel" class="setting-input" id="phoneNumber" disabled>
+            </div>
+            <div class="setting-item">
+                <label class="setting-label"><i class="fas fa-address-card"></i> Billing Address</label>
+                <input type="text" class="setting-input" id="billingAddress" placeholder="Enter your billing address">
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h3>Account Security</h3>
+            <div class="setting-item">
+                <label class="setting-label"><i class="fas fa-lock"></i> Change Password</label>
+                <input type="password" class="setting-input" placeholder="Enter new password">
+            </div>
+            <div class="setting-item">
+                <label class="setting-label"><i class="fas fa-shield-alt"></i> Two-Factor Authentication</label>
+                <div class="toggle-container">
+                    <div class="toggle-switch" id="twoFactorToggle">
+                        <div class="toggle-slider"></div>
+                    </div>
+                    <span>Enable 2FA via SMS or Authenticator</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h3>Notification Preferences</h3>
+            <div class="setting-item">
+                <label class="setting-label"><i class="fas fa-envelope"></i> Email Notifications</label>
+                <div class="toggle-container">
+                    <div class="toggle-switch" id="emailToggle">
+                        <div class="toggle-slider"></div>
+                    </div>
+                    <span>Usage alerts, promotions</span>
+                </div>
+            </div>
+            <div class="setting-item">
+                <label class="setting-label"><i class="fas fa-sms"></i> SMS Notifications</label>
+                <div class="toggle-container">
+                    <div class="toggle-switch" id="smsToggle">
+                        <div class="toggle-slider"></div>
+                    </div>
+                    <span>Balance updates, payment reminders</span>
+                </div>
+            </div>
+            <div class="setting-item">
+                <label class="setting-label"><i class="fas fa-bell"></i> Push Notifications</label>
+                <div class="toggle-container">
+                    <div class="toggle-switch" id="pushToggle">
+                        <div class="toggle-slider"></div>
+                    </div>
+                    <span>Real-time plan updates</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h3>Plan & Payment</h3>
+            <div class="setting-item">
+                <label class="setting-label"><i class="fas fa-credit-card"></i> Auto-Renew Plan</label>
+                <div class="toggle-container">
+                    <div class="toggle-switch" id="autoRenewToggle">
+                        <div class="toggle-slider"></div>
+                    </div>
+                    <span>Automatic plan renewal</span>
+                </div>
+            </div>
+            <div class="setting-item">
+                <label class="setting-label"><i class="fas fa-wallet"></i> Payment Method</label>
+                <select class="setting-select">
+                    <option value="card">Credit/Debit Card</option>
+                    <option value="paypal">PayPal</option>
+                    <option value="mobile">Mobile Wallet</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h3>Privacy & Data</h3>
+            <div class="setting-item">
+                <label class="setting-label"><i class="fas fa-share-alt"></i> Data Sharing</label>
+                <select class="setting-select">
+                    <option value="full">Full Sharing</option>
+                    <option value="limited">Limited Sharing</option>
+                    <option value="none">No Sharing</option>
+                </select>
+            </div>
+            <div class="setting-item">
+                <label class="setting-label"><i class="fas fa-map-marker-alt"></i> Location Services</label>
+                <div class="toggle-container">
+                    <div class="toggle-switch" id="locationToggle">
+                        <div class="toggle-slider"></div>
+                    </div>
+                    <span>For service optimization</span>
+                </div>
+            </div>
+            <div class="setting-item">
+                <label class="setting-label"><i class="fas fa-ad"></i> Personalized Ads</label>
+                <div class="toggle-container">
+                    <div class="toggle-switch" id="adsToggle">
+                        <div class="toggle-slider"></div>
+                    </div>
+                    <span>Tailored promotions</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="save-button" onclick="saveSettings()">Save Changes</button>
+            <button class="reset-button" onclick="resetSettings()">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        // Load user data from localStorage
+        const userName = localStorage.getItem('userName') || 'John Doe';
+        const userEmail = localStorage.getItem('userEmail') || 'john.doe@mobicomm.com';
+        const userMobile = localStorage.getItem('userMobile') || '1234567890';
+
+        // Format phone number with country code
+        const formattedMobile = `+91-${userMobile.slice(0, 3)}-${userMobile.slice(3, 6)}-${userMobile.slice(6)}`;
+
+        // Display user data in the form
+        document.getElementById('fullName').value = userName;
+        document.getElementById('emailAddress').value = userEmail;
+        document.getElementById('phoneNumber').value = formattedMobile;
+
+        // Toggle switch functionality
+        document.querySelectorAll('.toggle-switch').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                toggle.classList.toggle('active');
+            });
+        });
+
+        // GSAP Animation for settings header
+        gsap.from('.settings-header', {
+            duration: 1,
+            y: -50,
+            opacity: 0,
+            ease: 'power3.out'
+        });
+
+        // Save settings
+        function saveSettings() {
+            const updatedName = document.getElementById('fullName').value;
+            const updatedEmail = document.getElementById('emailAddress').value;
+
+            // Update localStorage with new values
+            localStorage.setItem('userName', updatedName);
+            localStorage.setItem('userEmail', updatedEmail);
+
+            const settings = {
+                fullName: updatedName,
+                email: updatedEmail,
+                billingAddress: document.getElementById('billingAddress').value,
+            };
+            console.log('Saving settings:', settings);
+            alert('Settings saved successfully!');
+        }
+
+        // Reset settings
+        function resetSettings() {
+            if (confirm('Reset all settings to default?')) {
+                // Reset to original values from localStorage
+                document.getElementById('fullName').value = userName;
+                document.getElementById('emailAddress').value = userEmail;
+                document.getElementById('phoneNumber').value = formattedMobile;
+                document.getElementById('billingAddress').value = '';
+
+                document.querySelectorAll('.toggle-switch').forEach(toggle => {
+                    toggle.classList.remove('active');
+                });
+
+                alert('Settings reset to default');
+            }
+        }
+    </script>
+</body>
+</html>

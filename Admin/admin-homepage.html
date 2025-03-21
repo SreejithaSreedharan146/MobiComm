@@ -1,0 +1,2103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Mobi-Comm</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #3b82f6;
+            --success: #10b981;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --border: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text-dark);
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .main {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--primary);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            transition: width 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .company-name {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            padding: 15px 0;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: background 0.2s ease;
+        }
+
+        .sidebar-link i {
+            width: 24px;
+            margin-right: 15px;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        /* Content */
+        .content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .user-menu {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .user-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            top: 50px;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+            border-radius: 8px;
+            width: 180px;
+            display: none;
+            z-index: 100;
+        }
+
+        .dropdown-menu.active {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            padding: 12px 20px;
+            display: block;
+            text-decoration: none;
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s ease;
+        }
+
+        .dropdown-menu a:hover {
+            background: var(--background);
+        }
+
+        /* Dashboard */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-card div:first-child {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Tabs */
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            background: var(--background);
+            color: var(--text-dark);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: var(--border);
+        }
+
+        /* Search */
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border: 1px solid var(--secondary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Tables */
+        .table-container {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--background);
+            font-weight: 600;
+        }
+
+        /* Specific styles for subscriber table */
+        .subscriber-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--card-bg);
+            box-shadow: var(--shadow);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .subscriber-table th,
+        .subscriber-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .subscriber-table th {
+            background-color: #f1f3f5;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .subscriber-table td {
+            color: var(--text-dark);
+        }
+
+        /* Forms */
+        .form-container {
+            display: none;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        /* Buttons */
+        .action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            margin-right: 5px;
+        }
+        .primary-btn {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background: #2563eb;
+        }
+
+        .action-btn.primary-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .action-btn.primary-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .secondary-btn {
+            background: var(--background);
+            color: var(--text-dark);
+        }
+
+        .secondary-btn:hover {
+            background: var(--border);
+        }
+
+        .action-btn.secondary-btn.send-reminder-btn {
+            background-color: #4a5c92;
+            color: white;
+        }
+
+        .action-btn.secondary-btn.send-reminder-btn:hover {
+            background-color: #3b4a78;
+        }
+
+        .danger-btn {
+            background: var(--danger);
+            color: white;
+        }
+
+        .danger-btn:hover {
+            background: #dc2626;
+        }
+
+        /* Profile */
+        .profile-container {
+            display: grid;
+            gap: 20px;
+        }
+
+        .profile-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .profile-avatar i {
+            font-size: 80px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .profile-info h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .profile-info p {
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+        }
+
+        .modal-content h3 {
+            margin-bottom: 15px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .recharge-history {
+            margin: 20px 0;
+            width: 100%;
+        }
+
+        .action-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        #subscriber-pagination {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .page-btn {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+
+        .page-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Analytics */
+        .analytics-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .chart-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .chart-card2 {
+            width: 1065px;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .chart-card h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .chart-placeholder {
+            height: 150px;
+            background: #f0f2f5;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .chart-placeholder.histogram {
+            display: flex;
+            gap: 5px;
+            align-items: flex-end;
+            padding: 10px;
+        }
+
+        .chart-placeholder.histogram div {
+            background: var(--primary);
+            flex: 1;
+            border-radius: 4px;
+        }
+
+        .chart-placeholder.line {
+            position: relative;
+        }
+
+        .chart-placeholder.pie {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--primary) 0% 50%,
+                var(--secondary) 50% 80%,
+                #93c5fd 80% 95%,
+                #bfdbfe 95% 100%
+            );
+        }
+
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+        }
+
+        .legend-item span {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .chart-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .chart-table th,
+        .chart-table td {
+            padding: 10px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .chart-table th {
+            background: transparent;
+            font-weight: 600;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        .chart-table td {
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        /* Profile Activities */
+        .activities-section {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-top: 20px;
+        }
+
+        .activities-section h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+/* Compact Form Layout for Add New Plan */
+.compact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Reduced gap between form rows */
+}
+
+/* Form Container for Add New Plan */
+#add-plan-form.form-container {
+    padding: 12px; /* Reduced padding to decrease height */
+}
+
+/* Form Row */
+.form-row {
+    display: flex;
+    gap: 10px; /* Reduced gap between fields in a row */
+    flex-wrap: wrap;
+}
+
+/* Form Group */
+.form-row .form-group {
+    flex: 1;
+    min-width: 200px;
+    margin-bottom: 8px; /* Reduced margin to decrease height */
+}
+
+/* Labels */
+.form-group label {
+    font-size: 13px; /* Reduced font size */
+    color: var(--text-dark);
+    margin-bottom: 4px; /* Reduced margin to decrease height */
+}
+
+/* Inputs and Selects */
+.form-group input,
+.form-group select {
+    padding: 6px; /* Reduced padding to decrease height */
+    font-size: 13px; /* Reduced font size */
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s ease;
+}
+
+/* Focus States */
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--secondary);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+/* Form Header */
+.form-container h2 {
+    font-size: 18px; /* Reduced font size */
+    margin-bottom: 10px; /* Reduced margin to decrease height */
+    color: var(--text-dark);
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 8px; /* Reduced gap between buttons */
+    justify-content: flex-end;
+    margin-top: 8px; /* Reduced margin to decrease height */
+}
+
+/* Buttons */
+.action-btn {
+    padding: 6px 12px; /* Reduced padding to decrease height */
+    font-size: 13px; /* Reduced font size */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    #add-plan-form.form-container {
+        padding: 10px; /* Further reduced padding on smaller screens */
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 8px; /* Reduced gap for smaller screens */
+    }
+
+    .form-row .form-group {
+        min-width: 100%;
+        margin-bottom: 6px; /* Further reduced margin */
+    }
+
+    .form-group label {
+        font-size: 12px; /* Further reduced font size */
+    }
+
+    .form-group input,
+    .form-group select {
+        padding: 5px; /* Further reduced padding */
+        font-size: 12px; /* Further reduced font size */
+    }
+
+    .form-container h2 {
+        font-size: 16px; /* Further reduced font size */
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        gap: 6px; /* Reduced gap for smaller screens */
+    }
+
+    .action-btn {
+        width: 100%;
+        padding: 5px 10px; /* Further reduced padding */
+        font-size: 12px; /* Further reduced font size */
+    }
+}
+
+@media (max-width: 480px) {
+    #add-plan-form.form-container {
+        padding: 8px; /* Further reduced padding for very small screens */
+    }
+
+    .form-container h2 {
+        font-size: 14px; /* Further reduced font size */
+    }
+
+    .form-group label {
+        font-size: 11px; /* Further reduced font size */
+    }
+
+    .form-group input,
+    .form-group select {
+        padding: 4px; /* Further reduced padding */
+        font-size: 11px; /* Further reduced font size */
+    }
+
+    .action-btn {
+        padding: 4px 8px; /* Further reduced padding */
+        font-size: 11px; /* Further reduced font size */
+    }
+}
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .content {
+                margin-left: 200px;
+                padding: 15px;
+            }
+
+            .stats-container {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            }
+
+            .analytics-container {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+
+            .page-title {
+                font-size: 22px;
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+            .stat-value {
+                font-size: 20px;
+            }
+
+            .chart-placeholder {
+                height: 130px;
+            }
+
+            .chart-placeholder.pie {
+                width: 130px;
+                height: 130px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+
+            .sidebar-header {
+                justify-content: center;
+                padding: 15px;
+            }
+
+            .company-name {
+                display: none;
+            }
+
+            .sidebar-link span {
+                display: none;
+            }
+
+            .sidebar-link i {
+                margin-right: 0;
+                font-size: 20px;
+            }
+
+            .sidebar-link {
+                padding: 15px;
+                justify-content: center;
+            }
+
+            .content {
+                margin-left: 70px;
+                padding: 10px;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            .analytics-container {
+                grid-template-columns: 1fr;
+            }
+
+            .tab-buttons {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                width: 100%;
+                text-align: left;
+                padding: 10px 15px;
+            }
+
+            .profile-actions {
+                flex-direction: column;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+                padding: 10px;
+            }
+
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .search-bar input {
+                width: 100%;
+            }
+
+            .search-bar button {
+                width: 100%;
+            }
+
+            th, td {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .chart-table th,
+            .chart-table td {
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+
+            .chart-card {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 50px;
+            }
+
+            .content {
+                margin-left: 50px;
+                padding: 8px;
+            }
+
+            .page-title {
+                font-size: 18px;
+            }
+
+            .stat-card {
+                padding: 12px;
+            }
+
+            .stat-value {
+                font-size: 18px;
+            }
+
+            th, td {
+                padding: 8px;
+                font-size: 12px;
+            }
+
+            .chart-table th,
+            .chart-table td {
+                padding: 6px 8px;
+                font-size: 12px;
+            }
+
+            .chart-placeholder {
+                height: 100px;
+            }
+
+            .chart-placeholder.pie {
+                width: 100px;
+                height: 100px;
+            }
+
+            .chart-card h3 {
+                font-size: 16px;
+            }
+
+            .legend-item {
+                font-size: 12px;
+            }
+
+            .profile-avatar i {
+                font-size: 60px;
+            }
+
+            .profile-info h3 {
+                font-size: 20px;
+            }
+
+            .profile-info p {
+                font-size: 14px;
+            }
+
+            .form-group input {
+                padding: 8px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <img src="../Assets/logo-removebg-preview.png" style="height: 50px;width: 50px;" alt="logo">
+                <span class="company-name">Mobi-Comm</span>
+            </div>
+            <div class="sidebar-menu">
+                <a href="#dashboard" class="sidebar-link active">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#profile" class="sidebar-link">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </a>
+                <a href="#analytics" class="sidebar-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Analytics</span>
+                </a>
+                <a href="admin-loginpage.html" class="sidebar-link">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <header>
+                <span class="page-title">Admin Dashboard</span>
+                <div class="user-menu" onclick="toggleDropdown()">
+                    <div class="user-icon"><i class="fas fa-user"></i></div>
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <a href="admin-loginpage.html">Logout</a>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="section-content active">
+                <div class="dashboard-container">
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <div>Total Active Subscribers</div>
+                            <div class="stat-value" id="total-subscribers">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div>Plans Expiring Today</div>
+                            <div class="stat-value" id="expiring-plans">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div>Total Plans</div>
+                            <div class="stat-value" id="total-plans">0</div>
+                        </div>
+                        <!-- <div class="stat-card">
+                            <div>Active Offers</div>
+                            <div class="stat-value" id="active-offers">0</div>
+                        </div> -->
+                    </div>
+
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-tab="subscribers">Subscribers</button>
+                        <button class="tab-btn" data-tab="plans">Plans</button>
+                        <!-- <button class="tab-btn" data-tab="offers">Offers</button> -->
+                        <button class="tab-btn" data-tab="activities">Activities</button>
+                    </div>
+
+                    <!-- Search bar only for subscribers -->
+                    <div id="subscriber-search" class="search-bar">
+                        <input type="text" placeholder="Search subscribers..." id="searchInput">
+                        <button class="action-btn primary-btn">Search</button>
+                    </div>
+
+                    <!-- Subscribers Section -->
+                    <div id="subscribers-tab" class="tab-content">
+                        <div class="table-container">
+                            <div id="subscriberGrid"></div>
+                            <div class="pagination" id="subscriber-pagination"></div>
+                        </div>
+                    </div>
+
+                    <!-- Plans Section -->
+                    <div id="plans-tab" class="tab-content" style="display: none;">
+                        <button class="action-btn primary-btn" onclick="showAddPlanForm()">Add New Plan</button>
+                        <button class="action-btn secondary-btn" onclick="showAddCategoryForm()">Manage Categories</button>
+                        <div id="add-category-form" class="form-container" style="display:none">
+                            <h2>Add New Category</h2>
+                            <form id="categoryForm">
+                                <div class="form-group">
+                                    <label>Category Name</label>
+                                    <input type="text" name="categoryName" required>
+                                </div>
+                                <div class="action-buttons">
+                                    <button type="submit" class="action-btn primary-btn">Add Category</button>
+                                    <button type="button" class="action-btn secondary-btn" onclick="hideAddCategoryForm()">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                       <div id="add-plan-form" class="form-container">
+    <h2>Add New Plan</h2>
+    <form id="planForm" class="compact-form">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Category</label>
+                <select name="categoryId" id="categorySelect" required>
+                    <option value="">Select a Category</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Validity (days)</label>
+                <input type="number" name="validity" required placeholder="e.g., 28">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Data Allowance</label>
+                <input type="text" name="dataAllowance" placeholder="e.g., 1.5GB/day" required>
+            </div>
+            <div class="form-group">
+                <label>Call Benefits</label>
+                <input type="text" name="callBenefits" placeholder="e.g., Unlimited Calls" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>SMS Benefits</label>
+                <input type="text" name="smsBenefits" placeholder="e.g., 100 SMS/day" required>
+            </div>
+            <div class="form-group">
+                <label>Price (₹)</label>
+                <input type="number" name="price" required placeholder="e.g., 299">
+            </div>
+        </div>
+        <div class="action-buttons">
+            <button type="submit" class="action-btn primary-btn">Add Plan</button>
+            <button type="button" class="action-btn secondary-btn" onclick="hideAddPlanForm()">Cancel</button>
+        </div>
+    </form>
+</div>
+                        <div class="table-container">
+                            <table id="plans-table">
+                                <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th>Validity</th>
+                                        <th>Features</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            <div class="pagination" id="plans-pagination"></div>
+                        </div>
+                    </div>
+
+                    <!-- Offers Section -->
+                    <!-- <div id="offers-tab" class="tab-content" style="display: none;">
+                        <button class="action-btn primary-btn" onclick="showAddOfferForm()">Add New Offer</button>
+                        <div id="add-offer-form" class="form-container">
+                            <h2>Add New Offer</h2>
+                            <form id="offerForm">
+                                <div class="form-group">
+                                    <label>Offer Name</label>
+                                    <input type="text" name="offerName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Discount (%)</label>
+                                    <input type="number" name="discount" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Apply to Plan</label>
+                                    <select name="planId" id="planSelect" required>
+                                        <option value="">Select a Plan</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Valid Until</label>
+                                    <input type="date" name="validUntil" required>
+                                </div>
+                                <div class="action-buttons">
+                                    <button type="submit" class="action-btn primary-btn">Add Offer</button>
+                                    <button type="button" class="action-btn secondary-btn" onclick="hideAddOfferForm()">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="table-container">
+                            <table id="offers-table">
+                                <thead>
+                                    <tr>
+                                        <th>Offer Name</th>
+                                        <th>Discount</th>
+                                        <th>Plan</th>
+                                        <th>Valid Until</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            <div class="pagination" id="offers-pagination"></div>
+                        </div>
+                    </div> -->
+
+                    <!-- Activities Section -->
+                    <div id="activities-tab" class="tab-content" style="display: none;">
+                        <div class="table-container">
+                            <table id="activities-table">
+                                <thead>
+                                    <tr>
+                                        <th>Activity</th>
+                                        <th>User</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            <div class="pagination" id="activities-pagination"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Section -->
+            <div id="profile-section" class="section-content" style="display: none;">
+                <div class="profile-container">
+                    <div class="profile-card">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="profile-info">
+                            <h3 id="profile-name">Admin User</h3>
+                            <p id="profile-email">admin@mobicomm.com</p>
+                            <p>Role: Administrator</p>
+                            <p>Last Login: March 14, 2025 09:45 AM</p>
+                        </div>
+                        <div class="profile-actions">
+                            <button class="action-btn primary-btn" onclick="showEditProfileForm()">Edit Profile</button>
+                            <button class="action-btn secondary-btn" onclick="showChangePasswordForm()">Change Password</button>
+                        </div>
+                    </div>
+                    <div id="edit-profile-form" class="form-container">
+                        <h2>Edit Profile</h2>
+                        <form id="editProfileForm">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" name="name" value="Admin User" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" name="email" value="admin@mobicomm.com" required>
+                            </div>
+                            <div class="action-buttons">
+                                <button type="submit" class="action-btn primary-btn">Save Changes</button>
+                                <button type="button" class="action-btn secondary-btn" onclick="hideEditProfileForm()">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="change-password-form" class="form-container">
+                        <h2>Change Password</h2>
+                        <form id="changePasswordForm">
+                            <div class="form-group">
+                                <label>Current Password</label>
+                                <input type="password" name="currentPassword" required>
+                            </div>
+                            <div class="form-group">
+                                <label>New Password</label>
+                                <input type="password" name="newPassword" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Confirm New Password</label>
+                                <input type="password" name="confirmPassword" required>
+                            </div>
+                            <div class="action-buttons">
+                                <button type="submit" class="action-btn primary-btn">Change Password</button>
+                                <button type="button" class="action-btn secondary-btn" onclick="hideChangePasswordForm()">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="activities-section">
+                        <h3>Recent Activities</h3>
+                        <div class="table-container">
+                            <table id="profile-activities-table">
+                                <thead>
+                                    <tr>
+                                        <th>Activity</th>
+                                        <th>User</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div id="analytics-section" class="section-content" style="display: none;">
+                <div class="analytics-container">
+                    <div class="chart-card">
+                        <h3>Subscriber Growth</h3>
+                        <div class="chart-placeholder histogram">
+                            <div style="height: 40px;"></div>
+                            <div style="height: 50px;"></div>
+                            <div style="height: 70px;"></div>
+                            <div style="height: 90px;"></div>
+                            <div style="height: 110px;"></div>
+                            <div style="height: 100px;"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 14px; color: var(--text-light);">
+                            <span>Jan</span>
+                            <span>Feb</span>
+                            <span>Mar</span>
+                            <span>Apr</span>
+                            <span>May</span>
+                            <span>Jun</span>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Plan Distribution</h3>
+                        <div class="chart-placeholder pie"></div>
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <span style="background: var(--primary);"></span> Premium 5G (50%)
+                            </div>
+                            <div class="legend-item">
+                                <span style="background: var(--secondary);"></span> Standard 4G (30%)
+                            </div>
+                            <div class="legend-item">
+                                <span style="background: #93c5fd;"></span> Basic 4G (15%)
+                            </div>
+                            <div class="legend-item">
+                                <span style="background: #bfdbfe;"></span> Annual (5%)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Revenue Trends</h3>
+                        <div class="chart-placeholder line">
+                            <svg style="width: 100%; height: 100%;">
+                                <polyline points="0,130 50,100 100,110 150,80 200,90 250,70" 
+                                          style="fill: none; stroke: var(--primary); stroke-width: 2;" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="chart-card2">
+                        <h3>Top Plans by Revenue</h3>
+                        <table class="chart-table">
+                            <thead>
+                                <tr>
+                                    <th>Plan</th>
+                                    <th>Subscribers</th>
+                                    <th>Revenue</th>
+                                    <th>% of Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Premium 5G</td>
+                                    <td>1,245</td>
+                                    <td>₹745,755</td>
+                                    <td>42%</td>
+                                </tr>
+                                <tr>
+                                    <td>Annual Plan</td>
+                                    <td>524</td>
+                                    <td>₹1,571,476</td>
+                                    <td>33%</td>
+                                </tr>
+                                <tr>
+                                    <td>Standard 4G</td>
+                                    <td>682</td>
+                                    <td>₹379,886</td>
+                                    <td>15%</td>
+                                </tr>
+                                <tr>
+                                    <td>Basic 4G</td>
+                                    <td>612</td>
+                                    <td>₹195,546</td>
+                                    <td>10%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subscriber Details Modal -->
+    <div id="subscriberModal" class="modal">
+        <div class="modal-content">
+            <div id="subscriberDetails"></div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h3>Confirm Deletion</h3>
+            <p>Are you sure you want to delete this item?</p>
+            <div class="action-buttons">
+                <button class="action-btn danger-btn" id="confirmDeleteBtn">Delete</button>
+                <button class="action-btn secondary-btn" onclick="closeDeleteModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Base URL for API calls
+const BASE_URL = "http://localhost:8082/api/admin"; 
+
+// Load dashboard stats on page load
+document.addEventListener("DOMContentLoaded", function () {
+    loadDashboardStats();
+    loadSubscribers(1, "");
+    loadProfileActivities();
+});
+
+// Toggle dropdown menu
+function toggleDropdown() {
+    const dropdown = document.getElementById("dropdownMenu");
+    dropdown.classList.toggle("active");
+}
+
+// Load dashboard stats
+async function loadDashboardStats() {
+    try {
+        // Ensure DOM elements exist
+        const totalSubscribersEl = document.getElementById("total-subscribers");
+        const expiringPlansEl = document.getElementById("expiring-plans");
+        const totalPlansEl = document.getElementById("total-plans");
+
+        if (!totalSubscribersEl) console.error("Element #total-subscribers not found in DOM");
+        if (!expiringPlansEl) console.error("Element #expiring-plans not found in DOM");
+        if (!totalPlansEl) console.error("Element #total-plans not found in DOM");
+
+        // Only proceed if all elements are found
+        if (totalSubscribersEl && expiringPlansEl && totalPlansEl) {
+            const response = await fetch(`${BASE_URL}/stats`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch stats: ${response.status} ${response.statusText}`);
+            }
+            const stats = await response.json();
+
+            totalSubscribersEl.textContent = stats.totalSubscribers ?? "N/A";
+            expiringPlansEl.textContent = stats.expiringPlans ?? "N/A";
+            totalPlansEl.textContent = stats.totalPlans ?? "N/A";
+        } else {
+            console.error("One or more dashboard stat elements are missing; skipping stats update.");
+        }
+    } catch (error) {
+        console.error("Error loading dashboard stats:", error);
+        // Optionally show a toast if defined
+        if (typeof showToast === "function") {
+            showToast("Failed to load dashboard stats");
+        }
+    }
+}
+
+// Tab switching logic
+const tabButtons = document.querySelectorAll(".tab-btn");
+const tabContents = document.querySelectorAll(".tab-content");
+
+tabButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        // Remove active class from all buttons and contents
+        tabButtons.forEach(btn => btn.classList.remove("active"));
+        tabContents.forEach(content => content.style.display = "none");
+
+        // Add active class to clicked button and show corresponding content
+        button.classList.add("active");
+        const tab = button.getAttribute("data-tab");
+        document.getElementById(`${tab}-tab`).style.display = "block";
+
+        // Hide search bar for non-subscriber tabs
+        const searchBar = document.getElementById("subscriber-search");
+        searchBar.style.display = tab === "subscribers" ? "flex" : "none";
+
+        // Load data for the selected tab
+        if (tab === "subscribers") {
+            loadSubscribers(1, document.getElementById("searchInput").value);
+        } else if (tab === "plans") {
+            loadPlans(1);
+        } else if (tab === "offers") {
+            loadOffers(1);
+        } else if (tab === "activities") {
+            loadActivities(1);
+        }
+    });
+});
+
+// Search functionality for subscribers
+const searchInput = document.getElementById("searchInput");
+searchInput.addEventListener("input", () => {
+    loadSubscribers(1, searchInput.value);
+});
+
+// Load subscribers with pagination and search
+async function loadSubscribers(page, searchTerm) {
+    try {
+        const response = await fetch(`${BASE_URL}/subscribers/view?page=${page}&searchTerm=${encodeURIComponent(searchTerm)}`);
+        const html = await response.text();
+        document.getElementById("subscriberGrid").innerHTML = html;
+    } catch (error) {
+        console.error("Error loading subscribers:", error);
+    }
+}
+
+// Load plans with pagination
+async function loadPlans(page) {
+    try {
+        const response = await fetch(`${BASE_URL}/plans/view?page=${page}`);
+        const html = await response.text();
+        document.getElementById("plans-table").parentElement.innerHTML = html;
+    } catch (error) {
+        console.error("Error loading plans:", error);
+    }
+}
+
+// // Load offers with pagination
+// async function loadOffers(page) {
+//     try {
+//         const response = await fetch(`${BASE_URL}/offers/view?page=${page}`);
+//         const html = await response.text();
+//         document.getElementById("offers-table").parentElement.innerHTML = html;
+//     } catch (error) {
+//         console.error("Error loading offers:", error);
+//     }
+// }
+
+// Load activities with pagination
+async function loadActivities(page) {
+    try {
+        const response = await fetch(`${BASE_URL}/activities/view?page=${page}`);
+        const html = await response.text();
+        document.getElementById("activities-table").parentElement.innerHTML = html;
+    } catch (error) {
+        console.error("Error loading activities:", error);
+    }
+}
+
+// Load profile activities
+async function loadProfileActivities() {
+    try {
+        const response = await fetch(`${BASE_URL}/profile-activities/view`);
+        const html = await response.text();
+        document.getElementById("profile-activities-table").parentElement.innerHTML = html;
+    } catch (error) {
+        console.error("Error loading profile activities:", error);
+    }
+}
+
+// Show subscriber details in modal
+async function showSubscriberDetails(id) {
+    try {
+        const response = await fetch(`${BASE_URL}/subscribers/${id}/details`);
+        const html = await response.text();
+        document.getElementById("subscriberDetails").innerHTML = html;
+        document.getElementById("subscriberModal").style.display = "flex";
+    } catch (error) {
+        console.error("Error loading subscriber details:", error);
+    }
+}
+
+// Send reminder
+async function sendReminder(userId) {
+    try {
+        const response = await fetch(`${BASE_URL}/send-reminder/${userId}`, {
+            method: "POST"
+        });
+        const result = await response.json();
+        showToast(result.message);
+    } catch (error) {
+        console.error("Error sending reminder:", error);
+    }
+}
+
+// Close modal
+function closeModal() {
+    document.getElementById("subscriberModal").style.display = "none";
+}
+
+// Show toast notification
+function showToast(message) {
+    const toast = document.createElement("div");
+    toast.className = "toast";
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+        toast.classList.add("show");
+    }, 100);
+    setTimeout(() => {
+        toast.classList.remove("show");
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }, 3000);
+}
+
+// Show/hide forms (for Plans, Offers, etc.)
+function showAddPlanForm() {
+    fetch(`${BASE_URL}/plans/add`)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById("add-plan-form").innerHTML = html;
+            document.getElementById("add-plan-form").style.display = "block";
+
+            // Add event listener for form submission
+            const planForm = document.getElementById("planForm");
+            planForm.addEventListener("submit", async function (e) {
+                e.preventDefault();
+                const formData = new FormData(planForm);
+                const data = {
+                    categoryId: formData.get("categoryId"),
+                    dataAllowance: formData.get("dataAllowance"),
+                    callBenefits: formData.get("callBenefits"),
+                    smsBenefits: formData.get("smsBenefits"),
+                    validity: formData.get("validity"),
+                    price: formData.get("price")
+                };
+
+                try {
+                    const editingId = planForm.getAttribute("data-editing-id");
+                    let url = `${BASE_URL}/plans`;
+                    let method = "POST";
+
+                    if (editingId) {
+                        url = `${BASE_URL}/plans/${editingId}`;
+                        method = "PUT";
+                    }
+
+                    const response = await fetch(url, {
+                        method: method,
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        showToast(editingId ? "Plan updated successfully" : "Plan added successfully");
+                        hideAddPlanForm();
+                        loadPlans(1);
+                    } else {
+                        const error = await response.json();
+                        showToast(error.message || "Error saving plan");
+                    }
+                } catch (error) {
+                    console.error("Error saving plan:", error);
+                    showToast("Error saving plan");
+                }
+            });
+        })
+        .catch(error => {
+            console.error("Error loading add plan form:", error);
+        });
+}
+
+function hideAddPlanForm() {
+    document.getElementById("add-plan-form").style.display = "none";
+}
+// Function to fetch and populate categories in the dropdown
+async function populateCategoryDropdown() {
+    try {
+        // Fetch categories from the backend
+        const response = await fetch(`${BASE_URL}/categories`);
+        const categories = await response.json();
+
+        // Ensure categories are unique (case-insensitive) on the frontend as a safeguard
+        const uniqueCategories = [...new Set(categories.map(cat => cat.categoryName.toLowerCase()))].map(name => {
+            return categories.find(cat => cat.categoryName.toLowerCase() === name);
+        });
+
+        // Get the category dropdown
+        const categorySelect = document.getElementById("categorySelect");
+        categorySelect.innerHTML = '<option value="">Select a Category</option>'; // Reset dropdown
+
+        // Populate the dropdown with unique categories
+        uniqueCategories.forEach(category => {
+            const option = document.createElement("option");
+            option.value = category.id; // Assuming each category has an 'id' field
+            option.textContent = category.categoryName;
+            categorySelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error("Error fetching categories:", error);
+        showToast("Error loading categories");
+    }
+}
+
+// Updated showAddPlanForm to populate the category dropdown
+function showAddPlanForm() {
+    fetch(`${BASE_URL}/plans/add`)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById("add-plan-form").innerHTML = html;
+            document.getElementById("add-plan-form").style.display = "block";
+
+            // Populate the category dropdown
+            populateCategoryDropdown();
+
+            // Add event listener for form submission
+            const planForm = document.getElementById("planForm");
+            planForm.addEventListener("submit", async function (e) {
+                e.preventDefault();
+                const formData = new FormData(planForm);
+                const data = {
+                    categoryId: formData.get("categoryId"),
+                    dataAllowance: formData.get("dataAllowance"),
+                    callBenefits: formData.get("callBenefits"),
+                    smsBenefits: formData.get("smsBenefits"),
+                    validity: formData.get("validity"),
+                    price: formData.get("price")
+                };
+
+                try {
+                    const editingId = planForm.getAttribute("data-editing-id");
+                    let url = `${BASE_URL}/plans`;
+                    let method = "POST";
+
+                    if (editingId) {
+                        url = `${BASE_URL}/plans/${editingId}`;
+                        method = "PUT";
+                    }
+
+                    const response = await fetch(url, {
+                        method: method,
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        showToast(editingId ? "Plan updated successfully" : "Plan added successfully");
+                        hideAddPlanForm();
+                        loadPlans(1);
+                    } else {
+                        const error = await response.json();
+                        showToast(error.message || "Error saving plan");
+                    }
+                } catch (error) {
+                    console.error("Error saving plan:", error);
+                    showToast("Error saving plan");
+                }
+            });
+        })
+        .catch(error => {
+            console.error("Error loading add plan form:", error);
+        });
+}
+
+// Updated showAddCategoryForm to prevent duplicate submissions on the frontend
+function showAddCategoryForm() {
+    document.getElementById("add-category-form").style.display = "block";
+
+    // Add event listener for form submission
+    const categoryForm = document.getElementById("categoryForm");
+    if (categoryForm) {
+        categoryForm.addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const formData = new FormData(categoryForm);
+            const categoryName = formData.get("categoryName").trim();
+
+            // Fetch existing categories to check for duplicates
+            try {
+                const response = await fetch(`${BASE_URL}/categories`);
+                const categories = await response.json();
+                const categoryExists = categories.some(cat => cat.categoryName.toLowerCase() === categoryName.toLowerCase());
+
+                if (categoryExists) {
+                    showToast("Category already exists!");
+                    return;
+                }
+
+                // If no duplicate, proceed with adding the category
+                const data = { categoryName };
+                const addResponse = await fetch(`${BASE_URL}/categories/add`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await addResponse.json();
+                if (addResponse.ok) {
+                    showToast(result.message);
+                    hideAddCategoryForm();
+                    // Reload plans to refresh the category dropdown
+                    loadPlans(1);
+                } else {
+                    showToast(result.message || "Error adding category");
+                }
+            } catch (error) {
+                console.error("Error adding category:", error);
+                showToast("Error adding category");
+            }
+        });
+    }
+}
+// function showAddOfferForm() {
+//     fetch(`${BASE_URL}/offers/add`)
+//         .then(response => response.text())
+//         .then(html => {
+//             document.getElementById("add-offer-form").innerHTML = html;
+//             document.getElementById("add-offer-form").style.display = "block";
+
+//             // Add event listener for form submission
+//             const offerForm = document.getElementById("offerForm");
+//             offerForm.addEventListener("submit", async function (e) {
+//                 e.preventDefault();
+//                 const formData = new FormData(offerForm);
+//                 const data = {
+//                     offerName: formData.get("offerName"),
+//                     discount: formData.get("discount"),
+//                     planId: formData.get("planId"),
+//                     validUntil: formData.get("validUntil")
+//                 };
+
+//                 try {
+//                     const editingId = offerForm.getAttribute("data-editing-id");
+//                     let url = `${BASE_URL}/offers`;
+//                     let method = "POST";
+
+//                     if (editingId) {
+//                         url = `${BASE_URL}/offers/${editingId}`;
+//                         method = "PUT";
+//                     }
+
+//                     const response = await fetch(url, {
+//                         method: method,
+//                         headers: {
+//                             "Content-Type": "application/json"
+//                         },
+//                         body: JSON.stringify(data)
+//                     });
+
+//                     const result = await response.json();
+//                     if (response.ok) {
+//                         showToast(editingId ? "Offer updated successfully" : "Offer added successfully");
+//                         hideAddOfferForm();
+//                         loadOffers(1);
+//                     } else {
+//                         showToast(result.message || "Error saving offer");
+//                     }
+//                 } catch (error) {
+//                     console.error("Error saving offer:", error);
+//                     showToast("Error saving offer");
+//                 }
+//             });
+//         })
+//         .catch(error => {
+//             console.error("Error loading add offer form:", error);
+//         });
+// }
+
+// function hideAddOfferForm() {
+//     document.getElementById("add-offer-form").style.display = "none";
+// }
+
+function showAddCategoryForm() {
+    document.getElementById("add-category-form").style.display = "block";
+
+    // Add event listener for form submission
+    const categoryForm = document.getElementById("categoryForm");
+    if (categoryForm) {
+        categoryForm.addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const formData = new FormData(categoryForm);
+            const data = {
+                categoryName: formData.get("categoryName")
+            };
+
+            try {
+                const response = await fetch(`${BASE_URL}/categories/add`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    showToast(result.message);
+                    hideAddCategoryForm();
+                    // Optionally reload plans to refresh the category dropdown
+                    loadPlans(1);
+                } else {
+                    showToast(result.message || "Error adding category");
+                }
+            } catch (error) {
+                console.error("Error adding category:", error);
+                showToast("Error adding category");
+            }
+        });
+    }
+}
+
+function hideAddCategoryForm() {
+    document.getElementById("add-category-form").style.display = "none";
+}
+
+function showEditProfileForm() {
+    document.getElementById("edit-profile-form").style.display = "block";
+}
+
+function hideEditProfileForm() {
+    document.getElementById("edit-profile-form").style.display = "none";
+}
+
+function showChangePasswordForm() {
+    document.getElementById("change-password-form").style.display = "block";
+}
+
+function hideChangePasswordForm() {
+    document.getElementById("change-password-form").style.display = "none";
+}
+
+function closeDeleteModal() {
+    document.getElementById("deleteModal").style.display = "none";
+}
+
+// Sidebar navigation
+const sidebarLinks = document.querySelectorAll(".sidebar-link");
+const sections = document.querySelectorAll(".section-content");
+
+sidebarLinks.forEach(link => {
+    link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const sectionId = link.getAttribute("href").substring(1);
+        sidebarLinks.forEach(l => l.classList.remove("active"));
+        link.classList.add("active");
+        sections.forEach(section => section.style.display = "none");
+        document.getElementById(`${sectionId}-section`).style.display = "block";
+    });
+});
+
+// New Functions Added Below
+
+// Edit a plan
+async function editPlan(id) {
+    try {
+        console.log(`Attempting to fetch edit form for plan ID: ${id}`);
+        const response = await fetch(`${BASE_URL}/plans/edit/${id}`, {
+            method: "GET",
+            headers: {
+                "Accept": "text/html"
+            }
+        });
+        
+        console.log(`Response status: ${response.status}`);
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Failed to fetch edit form: ${response.status} - ${errorText}`);
+            throw new Error(`Failed to load edit form: ${response.status} - ${errorText}`);
+        }
+
+        const html = await response.text();
+        console.log("Edit form HTML received:", html.substring(0, 100)); // Log first 100 chars
+
+        const formContainer = document.getElementById("add-plan-form");
+        if (!formContainer) {
+            console.error("Form container #add-plan-form not found in DOM");
+            throw new Error("Form container not found");
+        }
+
+        formContainer.innerHTML = html;
+        formContainer.style.display = "block";
+
+        const planForm = document.getElementById("planForm");
+        if (!planForm) {
+            console.error("Plan form #planForm not found in DOM after loading");
+            throw new Error("Plan form not found after loading");
+        }
+
+        // Attach form submission handler
+        planForm.removeEventListener("submit", handlePlanFormSubmit); // Remove old listener to prevent duplicates
+        planForm.addEventListener("submit", handlePlanFormSubmit);
+    } catch (error) {
+        console.error("Error in editPlan:", error);
+        showToast(`Error loading plan form: ${error.message}`);
+    }
+}
+async function handlePlanFormSubmit(e) {
+    e.preventDefault();
+    const planForm = document.getElementById("planForm");
+    const formData = new FormData(planForm);
+    const data = {
+        categoryId: formData.get("categoryId"),
+        dataAllowance: formData.get("dataAllowance"),
+        callBenefits: formData.get("callBenefits"),
+        smsBenefits: formData.get("smsBenefits"),
+        validity: formData.get("validity"),
+        price: formData.get("price")
+    };
+
+    console.log("Submitting plan data:", data);
+
+    try {
+        const editingId = planForm.getAttribute("data-editing-id");
+        let url = `${BASE_URL}/plans`; // Base URL for plans
+        let method = "POST";
+
+        if (editingId) {
+            url = `${BASE_URL}/plans/${editingId}`; // Correct URL for updating: /plans/{id}
+            method = "PUT";
+        }
+
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        console.log(`Response status: ${response.status}`);
+        const responseText = await response.text();
+        console.log(`Response body: ${responseText}`);
+
+        if (response.ok) {
+            const result = JSON.parse(responseText);
+            showToast(editingId ? "Plan successfully updated" : "Plan added successfully");
+            hideAddPlanForm();
+            loadPlans(1);
+            loadActivities(1);
+        } else {
+            throw new Error(`Failed to save plan: ${response.status} - ${responseText}`);
+        }
+    } catch (error) {
+        console.error("Error in handlePlanFormSubmit:", error);
+        showToast(`Error saving plan: ${error.message}`);
+    }
+}
+// Edit an offer
+// async function editOffer(id) {
+//     try {
+//         const response = await fetch(`${BASE_URL}/offers/edit/${id}`);
+//         const html = await response.text();
+//         document.getElementById("add-offer-form").innerHTML = html;
+//         document.getElementById("add-offer-form").style.display = "block";
+
+//         // The form submission handler is already added in showAddOfferForm
+//     } catch (error) {
+//         console.error("Error loading edit offer form:", error);
+//         showToast("Error loading offer form");
+//     }
+// }
+
+// Toggle plan status
+async function togglePlanStatus(id, currentStatus) {
+    try {
+        const response = await fetch(`${BASE_URL}/plans/${id}/status`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ status: currentStatus })
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            showToast(result.message);
+            loadPlans(1);
+        } else {
+            showToast(result.message || "Error toggling plan status");
+        }
+    } catch (error) {
+        console.error("Error toggling plan status:", error);
+        showToast("Error toggling plan status");
+    }
+}
+
+// Toggle offer status
+// async function toggleOfferStatus(id, currentStatus) {
+//     try {
+//         const response = await fetch(`${BASE_URL}/offers/${id}/status`, {
+//             method: "PATCH",
+//             headers: {
+//                 "Content-Type": "application/json"
+//             },
+//             body: JSON.stringify({ status: currentStatus })
+//         });
+
+//         const result = await response.json();
+//         if (response.ok) {
+//             showToast(result.message);
+//             loadOffers(1);
+//         } else {
+//             showToast(result.message || "Error toggling offer status");
+//         }
+//     } catch (error) {
+//         console.error("Error toggling offer status:", error);
+//         showToast("Error toggling offer status");
+//     }
+// }
+    </script>
+</body>
+</html>

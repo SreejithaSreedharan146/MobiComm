@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Prepaid Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0066CC;
+            --sidebar-color: #004D99;
+            --secondary-color: #e6e7f0;
+            --text-color: #333;
+            --light-text: #666;
+            --border-radius: 12px;
+            --card-shadow: 0 2px 10px rgba(0, 102, 204, 0.1);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: var(--text-color);
+        }
+        
+        .app-container {
+        display: flex;
+        min-height: 100vh;
+        width: 100%;
+    }
+
+    .sidebar {
+        width: 220px;
+        background-color: var(--sidebar-color);
+        padding: 20px 0;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        flex-shrink: 0;
+        color: white;
+        position: relative;
+        min-height: 100%;
+    }
+
+    .brand {
+        display: flex;
+        align-items: center;
+        padding: 0 20px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .logo {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+        
+        .brand-text {
+            font-size: 14px;
+            font-weight: 600;
+            margin-left: 10px;
+            color: white;
+        }
+        
+        .brand-text span {
+            display: block;
+            font-size: 12px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .nav-menu {
+        margin-top: 20px;
+        list-style-type: none;
+    }
+
+    .nav-item {
+        margin-bottom: 5px;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 10px 20px;
+        text-decoration: none;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+        transition: all 0.2s ease;
+    }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            border-left: 3px solid white;
+        }
+        
+        .nav-icon {
+            margin-right: 10px;
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+        flex-grow: 1;
+        padding: 20px;
+        overflow-y: auto;
+        width: calc(100% - 220px);
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+        
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .header-subtitle {
+            font-size: 13px;
+            color: var(--light-text);
+            margin-top: 3px;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+        
+        .notifications {
+            margin-right: 15px;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ff3b30;
+            color: white;
+            font-size: 10px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .dropdown-menu {
+            position: absolute;
+            top: 45px;
+            right: 0;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            min-width: 150px;
+            z-index: 100;
+            display: none;
+        }
+        
+        .dropdown-menu.active {
+            display: block;
+        }
+        
+        .dropdown-item {
+            padding: 10px 15px;
+            font-size: 14px;
+            color: black;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .dropdown-item:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .dropdown-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+            color: var(--primary-color);
+        }
+        
+        .balance-card {
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: var(--border-radius);
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: var(--card-shadow);
+        width: 100%;
+    }
+        .balance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .balance-title {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .expire-badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        
+        .balance-amount {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .balance-number {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        
+       
+        .usage-section {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+        
+        .usage-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .usage-title {
+            font-size: 13px;
+            color: var(--light-text);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .usage-title i {
+            font-size: 16px;
+            color: var(--primary-color);
+        }
+        
+        .usage-value {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .usage-info {
+            font-size: 12px;
+            color: var(--light-text);
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: #ebebeb;
+            border-radius: 3px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+        
+        .data-fill {
+            background-color: var(--primary-color);
+            width: 75%;
+        }
+        
+        .voice-fill {
+            background-color: #ff9500;
+            width: 40%;
+        }
+        
+        .sms-fill {
+            background-color: #32c77c;
+            width: 20%;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .view-all {
+            font-size: 13px;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .plans-container {
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+        width: 100%;
+    }
+        
+    .plan-item {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+        .plan-item:last-child {
+            border-bottom: none;
+        }
+        
+        .plan-time {
+            width: 60px;
+            text-align: center;
+            padding-right: 15px;
+        }
+        
+        .plan-price {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .plan-validity {
+            font-size: 11px;
+            color: var(--light-text);
+        }
+        
+        .plan-info {
+            flex-grow: 1;
+            padding: 0 15px;
+        }
+        
+        .plan-name {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+        
+        .plan-details {
+            font-size: 12px;
+            color: var(--light-text);
+        }
+        
+        .plan-badge {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-right: 10px;
+        }
+        
+        .plan-button {
+            padding: 6px 12px;
+            background-color: #f0f0f0;
+            color: var(--text-color);
+            border: none;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .plan-button:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .recent-transactions {
+            margin-bottom: 20px;
+        }
+        
+        .transaction-list {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+        }
+        
+        .transaction-item {
+            display: flex;
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            align-items: center;
+        }
+        
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+        
+        .transaction-icon {
+            width: 36px;
+            height: 36px;
+            background-color: var(--secondary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--primary-color);
+        }
+        
+        .transaction-details {
+            flex-grow: 1;
+        }
+        
+        .transaction-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+        
+        .transaction-date {
+            font-size: 12px;
+            color: var(--light-text);
+        }
+        
+        .transaction-amount {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .amount-debit {
+            color: #ff3b30;
+        }
+        
+        .amount-credit {
+            color: #32c77c;
+        }
+        
+        .process-section {
+            margin-bottom: 20px;
+        }
+        
+        .process-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .process-steps {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .process-step {
+            flex: 1;
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .step-number {
+            width: 24px;
+            height: 24px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .step-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .step-description {
+            font-size: 12px;
+            color: var(--light-text);
+            line-height: 1.4;
+        }
+        
+        @media (max-width: 1024px) {
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                padding: 10px 0;
+            }
+            
+            .brand {
+                padding: 10px 20px;
+            }
+            
+            .nav-menu {
+                display: flex;
+                overflow-x: auto;
+                margin-top: 10px;
+                padding-bottom: 10px;
+            }
+            
+            .nav-item {
+                margin-bottom: 0;
+                flex-shrink: 0;
+            }
+            
+            .usage-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .process-steps {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .plan-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .plan-time {
+                width: 100%;
+                text-align: left;
+                padding-right: 0;
+                margin-bottom: 10px;
+            }
+            
+            .plan-button {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="brand">
+                <div class="logo">
+                    <a href="#"><img src="../Assets/logo-removebg-preview.png" alt="Company Logo" width="40" height="40"></a>
+                </div>
+                <div class="brand-text">
+                    Mobi-comm
+                    <span>Prepaid Services</span>
+                </div>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="user-homepage.html" class="nav-link active">
+                        <span class="nav-icon"><i class="fas fa-home"></i></span>
+                        Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="user-usagepage.html" class="nav-link">
+                        <span class="nav-icon"><i class="fas fa-chart-bar"></i></span>
+                        Usage
+                    </a> 
+                </li>
+                <li class="nav-item">
+                    <a href="user-rechargepage2.html" class="nav-link">
+                        <span class="nav-icon"><i class="fas fa-wallet"></i></span>
+                        Recharge
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="user-transactionpage.html" class="nav-link">
+                        <span class="nav-icon"><i class="fas fa-exchange-alt"></i></span>
+                        Transactions
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="user-settingspage.html" class="nav-link">
+                        <span class="nav-icon"><i class="fas fa-cog"></i></span>
+                        Settings
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="main-content">
+            <div class="header">
+                <div>
+                    <h1 class="header-title">My Account</h1>
+                    <div class="header-subtitle">Manage your prepaid mobile services</div>
+                </div>
+                
+                <div class="user-profile">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">2</span>
+                    </div>
+                    <div class="user-avatar" id="userMenu">
+                        <span id="userInitials"></span>
+                        <div class="dropdown-menu" id="userDropdown">
+                            <div class="dropdown-item">
+                                <i class="fas fa-user"></i>
+                                <span id="userNameDisplay"></span>
+                            </div>
+                            <div class="dropdown-item">
+                                <i class="fas fa-envelope"></i>
+                                <span id="userEmailDisplay"></span>
+                            </div>
+                            <div class="dropdown-item">
+                                <i class="fas fa-question-circle"></i>
+                                Help
+                            </div>
+                            <div class="dropdown-item">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <a href="user-loginpage.html"> Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="balance-card">
+                <div class="balance-header">
+                    <div class="expire-badge">Expires in 15 days</div>
+                </div>
+                <div class="balance-number" id="userMobileDisplay" style="font-weight: bolder;">+91 9876 543210</div>
+            </div>
+            
+            <div class="usage-section">
+                <div class="usage-card">
+                    <div class="usage-title">
+                        <span>DATA BALANCE</span>
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="usage-value">1.5 GB</div>
+                    <div class="usage-info">of 2 GB daily | Resets in 6h 30m</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill data-fill"></div>
+                    </div>
+                </div>
+                
+                <div class="usage-card">
+                    <div class="usage-title">
+                        <span>VOICE BALANCE</span>
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="usage-value">120 min</div>
+                    <div class="usage-info">of 300 min | Unlimited on-net</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill voice-fill"></div>
+                    </div>
+                </div>
+                
+                <div class="usage-card">
+                    <div class="usage-title">
+                        <span>SMS BALANCE</span>
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="usage-value">20</div>
+                    <div class="usage-info">of 100 SMS | Daily limit</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill sms-fill"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="match-schedule">
+                <div class="section-header">
+                    <h2 class="section-title">Recommended Plans</h2>
+                </div>
+                
+                <div class="plans-container">
+                    <div class="plan-item">
+                        <div class="plan-time">
+                            <div class="plan-price">₹299</div>
+                            <div class="plan-validity">28 days</div>
+                        </div>
+                        
+                        <div class="plan-info">
+                            <div class="plan-name">
+                                <span class="plan-badge">POPULAR</span>
+                                Value Pack
+                            </div>
+                            <div class="plan-details">2GB/day + Unlimited Calls + 100 SMS/day</div>
+                        </div>
+                        
+                        <button class="plan-button" onclick="redirectToRecharge('9876543210')">Recharge</button>
+                    </div>
+                    
+                    <div class="plan-item">
+                        <div class="plan-time">
+                            <div class="plan-price">₹499</div>
+                            <div class="plan-validity">56 days</div>
+                        </div>
+                        
+                        <div class="plan-info">
+                            <div class="plan-name">
+                                <span class="plan-badge">BEST VALUE</span>
+                                Smart Pack
+                            </div>
+                            <div class="plan-details">2.5GB/day + Unlimited Calls + Disney+ Subscription</div>
+                        </div>
+                        
+                        <button class="plan-button" onclick="redirectToRecharge('9876543210')">Recharge</button>
+                    </div>
+                    
+                    <div class="plan-item">
+                        <div class="plan-time">
+                            <div class="plan-price">₹99</div>
+                            <div class="plan-validity">14 days</div>
+                        </div>
+                        
+                        <div class="plan-info">
+                            <div class="plan-name">Data Booster</div>
+                            <div class="plan-details">12GB Data + Existing plan benefits</div>
+                        </div>
+                        
+                        <button class="plan-button" onclick="redirectToRecharge('9876543210')">Add-on</button>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="recent-transactions">
+                <div class="section-header">
+                    <h2 class="section-title">Recent Transactions</h2>
+                </div>
+                
+                <div class="transaction-list">
+                    <div class="transaction-item">
+                        <div class="transaction-icon"><i class="fas fa-money-bill-wave"></i></div>
+                        <div class="transaction-details">
+                            <div class="transaction-title">Recharge - Monthly Plan</div>
+                            <div class="transaction-date">Today, 10:25 AM</div>
+                        </div>
+                        <div class="transaction-amount amount-debit">-₹299.00</div>
+                    </div>
+                    
+                    <div class="transaction-item">
+                        <div class="transaction-icon"><i class="fas fa-mobile-alt"></i></div>
+                        <div class="transaction-details">
+                            <div class="transaction-title">Data Add-on Pack</div>
+                            <div class="transaction-date">Yesterday, 5:42 PM</div>
+                        </div>
+                        <div class="transaction-amount amount-debit">-₹51.00</div>
+                    </div>
+                    
+                    <div class="transaction-item">
+                        <div class="transaction-icon"><i class="fas fa-gift"></i></div>
+                        <div class="transaction-details">
+                            <div class="transaction-title">Cashback Received</div>
+                            <div class="transaction-date">Feb 28, 2:18 PM</div>
+                        </div>
+                        <div class="transaction-amount amount-credit">+₹30.00</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="process-section">
+                <h2 class="process-title">Account Management</h2>
+                
+                <div class="process-steps">
+                    <div class="process-step">
+                        <div class="step-number">1</div>
+                        <div class="step-title">Check Usage</div>
+                        <div class="step-description">Track your data, calls, and SMS consumption with detailed analytics</div>
+                    </div>
+                    
+                    <div class="process-step">
+                        <div class="step-number">2</div>
+                        <div class="step-title">Recharge Account</div>
+                        <div class="step-description">Easily recharge your account or set up auto payments for convenience</div>
+                    </div>
+                    
+                    <div class="process-step">
+                        <div class="step-number">3</div>
+                        <div class="step-title">Manage Services</div>
+                        <div class="step-description">Activate or deactivate additional services to customize your plan</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load user data from localStorage
+        const userMobile = localStorage.getItem('userMobile') || '9876543210';
+        const userName = localStorage.getItem('userName') || 'John Doe';
+        const userEmail = localStorage.getItem('userEmail') || 'john.doe@example.com';
+
+        // Display user data
+        document.getElementById('userMobileDisplay').textContent = `+91 ${userMobile}`;
+        document.getElementById('userNameDisplay').textContent = userName;
+        document.getElementById('userEmailDisplay').textContent = userEmail;
+
+        // Set user initials
+        const initials = userName.split(' ')
+            .map(word => word.charAt(0).toUpperCase())
+            .join('')
+            .slice(0, 2);
+        document.getElementById('userInitials').textContent = initials;
+
+        // Toggle user dropdown menu
+        const userMenu = document.getElementById('userMenu');
+        const userDropdown = document.getElementById('userDropdown');
+        
+        userMenu.addEventListener('click', function() {
+            userDropdown.classList.toggle('active');
+        });
+        
+        // Close dropdown when clicking elsewhere
+        document.addEventListener('click', function(event) {
+            if (!userMenu.contains(event.target)) {
+                userDropdown.classList.remove('active');
+            }
+        });
+
+        // Function to redirect to recharge page with mobile number
+        function redirectToRecharge(mobileNumber) {
+            sessionStorage.setItem('mobileNumber', mobileNumber); // Store mobile number in sessionStorage
+            window.location.href = `user-rechargepage2.html?mobile=${mobileNumber}`;
+        }
+    </script>
+</body>
+</html>
