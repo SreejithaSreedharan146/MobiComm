@@ -542,10 +542,13 @@
 
     <div class="main-container">
         <div class="breadcrumbs">
-            <a href="../index.html"><i class="fas fa-home"></i></a> 
-            Home  <a href="user-rechargepage.html" style="text-decoration: none;"><i class="fas fa-chevron-left"></i> </a> View plans
-            <i class="fas fa-chevron-right"></i> Payment interface
+            <a href="../index.html"> Home </a> 
+            <span>&#47;</span> 
+            <a href="user-rechargepage.html" style="text-decoration: none;">View plans</a> 
+            <span>&#47;</span> 
+            Payment interface
         </div>
+        
 
         <div class="payment-container">
             <div class="payment-summary">
@@ -565,573 +568,571 @@
         </div>
     </div>
 
-    <script>
-        const paymentOptions = [{
-            id: 'card',
-            title: 'Credit/Debit/ATM card',
-            icon: '<i class="fas fa-credit-card"></i>',
-            fields: `
-                <form id="cardForm" class="payment-form">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    const paymentOptions = [{
+        id: 'card',
+        title: 'Credit/Debit/ATM card',
+        icon: '<i class="fas fa-credit-card"></i>',
+        fields: `
+            <form id="cardForm" class="payment-form">
+                <div class="form-group">
+                    <input type="text" id="cardNumber" placeholder="Card Number" maxlength="16">
+                    <span class="error-message"></span>
+                </div>
+                <div class="form-row">
                     <div class="form-group">
-                        <input type="text" id="cardNumber" placeholder="Card Number" maxlength="16">
+                        <input type="text" id="expiryDate" placeholder="MM/YY" maxlength="5">
                         <span class="error-message"></span>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <input type="text" id="expiryDate" placeholder="MM/YY" maxlength="5" >
-                            <span class="error-message"></span>
-                        </div>
-                        <div class="form-group">
-                            <input type="password" id="cvv" placeholder="CVV" maxlength="3">
-                            <span class="error-message"></span>
-                        </div>
-                    </div>
                     <div class="form-group">
-                        <input type="text" id="cardName" placeholder="Name on Card" >
+                        <input type="password" id="cvv" placeholder="CVV" maxlength="3">
+                        <span class="error-message"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="cardName" placeholder="Name on Card">
+                    <span class="error-message"></span>
+                </div>
+                <button type="submit" class="submit-button">Pay Now</button>
+            </form>
+        `
+    },
+    {
+        id: 'netbanking',
+        title: 'Net banking',
+        icon: '<i class="fas fa-university"></i>',
+        fields: `
+            <form id="netbankingForm" class="payment-form">
+                <div class="form-group">
+                    <select id="bankSelect">
+                        <option value="">Select Bank</option>
+                        <option value="sbi">State Bank of India</option>
+                        <option value="hdfc">HDFC Bank</option>
+                        <option value="icici">ICICI Bank</option>
+                        <option value="axis">Axis Bank</option>
+                    </select>
+                    <span class="error-message"></span>
+                </div>
+                <div class="form-group" id="netbankingUserIdGroup" style="display: none;">
+                    <input type="text" id="netbankingUserId" placeholder="Net Banking User ID">
+                    <span class="error-message"></span>
+                </div>
+                <button type="submit" class="submit-button">Continue to Bank</button>
+            </form>
+        `
+    },
+    {
+        id: 'upi',
+        title: 'UPI',
+        icon: '<i class="fas fa-mobile-alt"></i>',
+        options: [{
+            name: 'PhonePe',
+            color: '#5f259f',
+            vpa: '@ybl'
+        },
+        {
+            name: 'Gpay',
+            color: '#4285f4',
+            vpa: '@okhdfcbank'
+        },
+        {
+            name: 'Paytm',
+            color: '#00b9f1',
+            vpa: '@paytm'
+        },
+        {
+            name: 'Amazon Pay',
+            color: '#ff9900',
+            vpa: '@apl'
+        },
+        {
+            name: 'BHIM UPI',
+            color: '#b01212',
+            vpa: '@upi'
+        },
+        {
+            name: 'ICICI Bank',
+            color: '#d32f2f',
+            vpa: '@icici'
+        },
+        {
+            name: 'SBI Bank',
+            color: '#1e88e5',
+            vpa: '@sbi'
+        }]
+    },
+    {
+        id: 'wallets',
+        title: 'Wallets',
+        icon: '<i class="fas fa-wallet"></i>',
+        fields: `
+            <div class="wallet-options">
+                <div class="wallet-option" data-wallet="paytm">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUEjY90pS-UfgHJU4glc8Aiupp1xCn_jcvRQ&s" alt="Paytm" height="40" width="40">
+                    <span>Paytm</span>
+                </div>
+                <div class="wallet-option" data-wallet="amazonpay">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiuGk2_yW81VH-BrQkOmLODov9tWZovyNX6g&s" alt="Amazon Pay" height="50" width="50">
+                    <span>Amazon Pay</span>
+                </div>
+                <div class="wallet-option" data-wallet="phonepe">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX1y9bRtwN4tkv5dwh33YdbbnJIBj-PRHmWg&s" alt="PhonePe" height="40" width="40">
+                    <span>PhonePe</span>
+                </div>
+            </div>
+            <div id="walletFormContainer" style="display: none;">
+                <form id="walletForm" class="payment-form">
+                    <div class="form-group">
+                        <input type="text" id="walletMobile" placeholder="Registered Mobile Number" maxlength="10">
                         <span class="error-message"></span>
                     </div>
                     <button type="submit" class="submit-button">Pay Now</button>
                 </form>
-            `
-        },
-        {
-            id: 'netbanking',
-            title: 'Net banking',
-            icon: '<i class="fas fa-university"></i>',
-            fields: `
-                <form id="netbankingForm" class="payment-form">
-                    <div class="form-group">
-                        <select id="bankSelect">
-                            <option value="">Select Bank</option>
-                            <option value="sbi">State Bank of India</option>
-                            <option value="hdfc">HDFC Bank</option>
-                            <option value="icici">ICICI Bank</option>
-                            <option value="axis">Axis Bank</option>
-                        </select>
-                        <span class="error-message"></span>
-                    </div>
-                    <div class="form-group" id="netbankingUserIdGroup" style="display: none;">
-                        <input type="text" id="netbankingUserId" placeholder="Net Banking User ID">
-                        <span class="error-message"></span>
-                    </div>
-                    <button type="submit" class="submit-button">Continue to Bank</button>
-                </form>
-            `
-        },
-        {
-            id: 'upi',
-            title: 'UPI',
-            icon: '<i class="fas fa-mobile-alt"></i>',
-            options: [{
-                    name: 'PhonePe',
-                    color: '#5f259f',
-                    vpa: '@ybl'
+            </div>
+        `
+    }];
+
+    // Card validation functions
+    function validateCardNumber(cardNumber) {
+        const regex = /^[0-9]{16}$/;
+        return regex.test(cardNumber) ? '' : 'Please enter a valid 16-digit card number';
+    }
+
+    function validateExpiryDate(expiryDate) {
+        const regex = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
+        if (!regex.test(expiryDate)) return 'Please enter date in MM/YY format';
+
+        const [month, year] = expiryDate.split('/');
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear() % 100;
+        const currentMonth = currentDate.getMonth() + 1;
+
+        if (parseInt(year) < currentYear || (parseInt(year) === currentYear && parseInt(month) < currentMonth)) {
+            return 'Card has expired';
+        }
+        return '';
+    }
+
+    function validateCVV(cvv) {
+        const regex = /^[0-9]{3}$/;
+        return regex.test(cvv) ? '' : 'Please enter a valid 3-digit CVV';
+    }
+
+    function validateCardName(name) {
+        return name.trim().length > 0 ? '' : 'Please enter the name on card';
+    }
+
+    // Net Banking User ID Validation
+    function validateNetbankingUserId(userId, bank) {
+        if (!userId.trim()) return 'Please enter your Net Banking User ID';
+
+        const userIdRegex = {
+            'sbi': /^[A-Za-z0-9]{6,15}$/,
+            'hdfc': /^[A-Za-z0-9]{8,20}$/,
+            'icici': /^[A-Za-z0-9]{5,15}$/,
+            'axis': /^[A-Za-z0-9]{6,12}$/
+        };
+
+        const regex = userIdRegex[bank];
+        return regex.test(userId) ? '' : `Invalid User ID for ${bank.toUpperCase()}. Must be ${bank === 'sbi' ? '6-15' : bank === 'hdfc' ? '8-20' : bank === 'icici' ? '5-15' : '6-12'} alphanumeric characters`;
+    }
+
+    // UPI ID Validation
+    function validateUpiId(upiId, vpa) {
+        if (!upiId.trim()) return 'Please enter your UPI ID';
+
+        const upiRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+$/;
+        if (!upiRegex.test(upiId)) return 'Invalid UPI ID format';
+
+        if (!upiId.endsWith(vpa)) return `UPI ID must end with ${vpa}`;
+
+        const handle = upiId.split('@')[0];
+        if (handle.length < 3 || handle.length > 50) return 'UPI handle must be between 3 and 50 characters';
+
+        return '';
+    }
+
+    // Wallet Mobile Number Validation
+    function validateWalletMobile(mobile) {
+        const mobileRegex = /^[6-9]\d{9}$/;
+        return mobileRegex.test(mobile) ? '' : 'Please enter a valid 10-digit mobile number';
+    }
+
+    // Add form validation for mobile number
+    function validateMobileNumber(number) {
+        const mobileRegex = /^[6-9]\d{9}$/;
+        return mobileRegex.test(number);
+    }
+
+    window.addEventListener('load', () => {
+        const selectedPlan = sessionStorage.getItem('selectedPlan');
+        const selectedPrice = sessionStorage.getItem('selectedPrice');
+        const mobileNumber = sessionStorage.getItem('mobileNumber');
+
+        if (mobileNumber) {
+            const prepaidNumberElement = document.querySelector('.prepaid-number');
+            if (prepaidNumberElement) {
+                prepaidNumberElement.textContent = `prepaid | ${mobileNumber}`;
+            }
+        }
+
+        if (selectedPlan) {
+            const planDetailsElement = document.querySelector('.data-details');
+            if (planDetailsElement) {
+                planDetailsElement.textContent = selectedPlan;
+            }
+        }
+
+        if (selectedPrice) {
+            const amountElement = document.querySelector('.amount span:last-child');
+            if (amountElement) {
+                amountElement.textContent = selectedPrice;
+            }
+        }
+    });
+
+    function processPayment(type, provider = '') {
+        const mobileNumber = sessionStorage.getItem('mobileNumber');
+
+        if (!mobileNumber || !validateMobileNumber(mobileNumber)) {
+            alert('Please enter a valid mobile number');
+            window.location.href = '../html/viewplans2.html';
+            return;
+        }
+
+        const button = document.querySelector(`#${type}Form .submit-button`) ||
+            document.querySelector('.submit-button');
+
+        if (button) {
+            setLoadingState(button, true);
+        }
+
+        const planDetails = document.querySelector('.data-details').textContent;
+        const amount = document.querySelector('.amount span:last-child').textContent;
+
+        // Create order by calling backend
+        fetch('http://localhost:8082/api/payment/create-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                mobileNumber: mobileNumber,
+                amount: amount,
+                planDetails: planDetails,
+                type: type,
+                provider: provider
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                alert(data.message);
+                if (button) setLoadingState(button, false);
+                return;
+            }
+
+            // Open Razorpay checkout
+            const options = {
+                key: data.key,
+                amount: data.amount,
+                currency: 'INR',
+                order_id: data.orderId,
+                handler: function (response) {
+                    // Verify payment with backend
+                    fetch('http://localhost:8082/api/payment/verify', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature,
+                            transactionId: data.transactionId
+                        })
+                    })
+                    .then(verifyResponse => verifyResponse.json())
+                    .then(verifyData => {
+                        if (verifyData.message === 'Payment verified successfully') {
+                            // Store transaction details in sessionStorage (for compatibility with success page)
+                            Object.entries(verifyData).forEach(([key, value]) => {
+                                sessionStorage.setItem(key, value);
+                            });
+
+                            // Redirect to success page
+                            window.location.href = "user-successfulrechargepage.html";
+                        } else {
+                            alert(verifyData.message);
+                            if (button) setLoadingState(button, false);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error verifying payment:', error);
+                        alert('Error verifying payment');
+                        if (button) setLoadingState(button, false);
+                    });
                 },
-                {
-                    name: 'Gpay',
-                    color: '#4285f4',
-                    vpa: '@okhdfcbank'
+                prefill: {
+                    contact: mobileNumber
                 },
-                {
-                    name: 'Paytm',
-                    color: '#00b9f1',
-                    vpa: '@paytm'
-                },
-                {
-                    name: 'Amazon Pay',
-                    color: '#ff9900',
-                    vpa: '@apl'
-                },
-                {
-                    name: 'BHIM UPI',
-                    color: '#b01212',
-                    vpa: '@upi'
-                },
-                {
-                    name: 'ICICI Bank',
-                    color: '#d32f2f',
-                    vpa: '@icici'
-                },
-                {
-                    name: 'SBI Bank',
-                    color: '#1e88e5',
-                    vpa: '@sbi'
+                theme: {
+                    color: '#3399cc'
                 }
-            ]
-        },
-        {
-            id: 'wallets',
-            title: 'Wallets',
-            icon: '<i class="fas fa-wallet"></i>',
-            fields: `
-                <div class="wallet-options">
-                    <div class="wallet-option" data-wallet="paytm">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUEjY90pS-UfgHJU4glc8Aiupp1xCn_jcvRQ&s" alt="Paytm" height="40" width="40">
-                        <span>Paytm</span>
-                    </div>
-                    <div class="wallet-option" data-wallet="amazonpay">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiuGk2_yW81VH-BrQkOmLODov9tWZovyNX6g&s" alt="Amazon Pay" height="50" width="50">
-                        <span>Amazon Pay</span>
-                    </div>
-                    <div class="wallet-option" data-wallet="phonepe">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX1y9bRtwN4tkv5dwh33YdbbnJIBj-PRHmWg&s" alt="PhonePe" height="40" width="40">
-                        <span>PhonePe</span>
-                    </div>
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.open();
+        })
+        .catch(error => {
+            console.error('Error creating order:', error);
+            alert('Error initiating payment');
+            if (button) setLoadingState(button, false);
+        });
+    }
+
+    const paymentOptionsContainer = document.querySelector('.payment-options');
+
+    paymentOptions.forEach(option => {
+        const optionElement = document.createElement('div');
+        optionElement.className = 'payment-option';
+        optionElement.innerHTML = `
+            <div class="payment-option-header">
+                <div class="option-left">
+                    ${option.icon}
+                    <span>${option.title}</span>
                 </div>
-                <div id="walletFormContainer" style="display: none;">
-                    <form id="walletForm" class="payment-form">
+                <span class="arrow">▼</span>
+            </div>
+            <div class="payment-content">
+                ${option.id === 'upi' ? `
+                    <div class="upi-options">
+                        ${option.options.map(upiOption => `
+                            <div class="upi-option">
+                                <div class="upi-icon" style="background-color: ${upiOption.color}">
+                                    ${upiOption.name.charAt(0)}
+                                </div>
+                                <span class="upi-name">${upiOption.name}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : option.fields || ''}
+            </div>
+        `;
+
+        paymentOptionsContainer.appendChild(optionElement);
+    });
+
+    document.querySelectorAll('.payment-option').forEach(option => {
+        option.addEventListener('click', (e) => {
+            if (e.target.closest('form')) return;
+
+            const wasActive = option.classList.contains('active');
+
+            document.querySelectorAll('.payment-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+
+            if (!wasActive) {
+                option.classList.add('active');
+            }
+        });
+    });
+
+    function setLoadingState(button, isLoading) {
+        if (isLoading) {
+            button.disabled = true;
+            button.textContent = 'Processing...';
+        } else {
+            button.disabled = false;
+            button.textContent = 'Pay Now';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const menuToggle = document.getElementById('mobileMenuBtn');
+        const navbar = document.getElementById('navbar');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginDropdown = document.getElementById('loginDropdown');
+
+        menuToggle.addEventListener('click', () => {
+            navbar.classList.toggle('active');
+        });
+
+        loginBtn.addEventListener('click', () => {
+            loginDropdown.style.display = loginDropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!loginBtn.contains(e.target) && !loginDropdown.contains(e.target)) {
+                loginDropdown.style.display = 'none';
+            }
+            if (window.innerWidth <= 768 && navbar.classList.contains('active')) {
+                if (!navbar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    navbar.classList.remove('active');
+                }
+            }
+        });
+
+        const cardForm = document.getElementById('cardForm');
+        if (cardForm) {
+            const cardNumber = document.getElementById('cardNumber');
+            const expiryDate = document.getElementById('expiryDate');
+            const cvv = document.getElementById('cvv');
+            const cardName = document.getElementById('cardName');
+
+            expiryDate.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 2) {
+                    value = value.slice(0, 2) + '/' + value.slice(2, 4);
+                }
+                e.target.value = value;
+            });
+
+            cardNumber.addEventListener('input', function() {
+                const error = validateCardNumber(this.value);
+                this.nextElementSibling.textContent = error;
+            });
+
+            expiryDate.addEventListener('input', function() {
+                const error = validateExpiryDate(this.value);
+                this.nextElementSibling.textContent = error;
+            });
+
+            cvv.addEventListener('input', function() {
+                const error = validateCVV(this.value);
+                this.nextElementSibling.textContent = error;
+            });
+
+            cardName.addEventListener('input', function() {
+                const error = validateCardName(this.value);
+                this.nextElementSibling.textContent = error;
+            });
+
+            cardForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                const cardNumberError = validateCardNumber(cardNumber.value);
+                const expiryDateError = validateExpiryDate(expiryDate.value);
+                const cvvError = validateCVV(cvv.value);
+                const cardNameError = validateCardName(cardName.value);
+
+                cardNumber.nextElementSibling.textContent = cardNumberError;
+                expiryDate.nextElementSibling.textContent = expiryDateError;
+                cvv.nextElementSibling.textContent = cvvError;
+                cardName.nextElementSibling.textContent = cardNameError;
+
+                if (!cardNumberError && !expiryDateError && !cvvError && !cardNameError) {
+                    processPayment('card');
+                }
+            });
+        }
+
+        const netbankingForm = document.getElementById('netbankingForm');
+        if (netbankingForm) {
+            const bankSelect = document.getElementById('bankSelect');
+            const userIdGroup = document.getElementById('netbankingUserIdGroup');
+            const userIdInput = document.getElementById('netbankingUserId');
+
+            bankSelect.addEventListener('change', function() {
+                this.nextElementSibling.textContent = this.value ? '' : 'Please select a bank';
+                userIdGroup.style.display = this.value ? 'block' : 'none';
+                userIdInput.value = '';
+            });
+
+            userIdInput.addEventListener('input', function() {
+                const error = validateNetbankingUserId(this.value, bankSelect.value);
+                this.nextElementSibling.textContent = error;
+            });
+
+            netbankingForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                const bankError = bankSelect.value ? '' : 'Please select a bank';
+                const userIdError = validateNetbankingUserId(userIdInput.value, bankSelect.value);
+
+                bankSelect.nextElementSibling.textContent = bankError;
+                userIdInput.nextElementSibling.textContent = userIdError;
+
+                if (!bankError && !userIdError) {
+                    processPayment('netbanking', bankSelect.value);
+                }
+            });
+        }
+
+        const upiOptions = document.querySelectorAll('.upi-option');
+        upiOptions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+
+                const provider = option.querySelector('.upi-name').textContent;
+                const vpa = paymentOptions.find(opt => opt.id === 'upi').options.find(opt => opt.name === provider).vpa;
+
+                const existingForm = option.parentElement.querySelector('.upi-form');
+                if (existingForm) existingForm.remove();
+
+                const upiForm = document.createElement('div');
+                upiForm.className = 'upi-form';
+                upiForm.innerHTML = `
+                    <form id="upiForm" class="payment-form">
                         <div class="form-group">
-                            <input type="text" id="walletMobile" placeholder="Registered Mobile Number" maxlength="10">
+                            <input type="text" id="upiId" placeholder="Enter UPI ID (e.g., yourname${vpa})">
                             <span class="error-message"></span>
                         </div>
                         <button type="submit" class="submit-button">Pay Now</button>
                     </form>
-                </div>
-            `
-        }];
-    
-        // Card validation functions
-        function validateCardNumber(cardNumber) {
-            const regex = /^[0-9]{16}$/;
-            return regex.test(cardNumber) ? '' : 'Please enter a valid 16-digit card number';
-        }
-    
-        function validateExpiryDate(expiryDate) {
-            const regex = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
-            if (!regex.test(expiryDate)) return 'Please enter date in MM/YY format';
-    
-            const [month, year] = expiryDate.split('/');
-            const currentDate = new Date();
-            const currentYear = currentDate.getFullYear() % 100;
-            const currentMonth = currentDate.getMonth() + 1;
-    
-            if (parseInt(year) < currentYear || (parseInt(year) === currentYear && parseInt(month) < currentMonth)) {
-                return 'Card has expired';
-            }
-            return '';
-        }
-    
-        function validateCVV(cvv) {
-            const regex = /^[0-9]{3}$/;
-            return regex.test(cvv) ? '' : 'Please enter a valid 3-digit CVV';
-        }
-    
-        function validateCardName(name) {
-            return name.trim().length > 0 ? '' : 'Please enter the name on card';
-        }
-    
-        // Net Banking User ID Validation
-        function validateNetbankingUserId(userId, bank) {
-            if (!userId.trim()) return 'Please enter your Net Banking User ID';
-            
-            // Bank-specific user ID validation
-            const userIdRegex = {
-                'sbi': /^[A-Za-z0-9]{6,15}$/, // SBI: 6-15 alphanumeric characters
-                'hdfc': /^[A-Za-z0-9]{8,20}$/, // HDFC: 8-20 alphanumeric characters
-                'icici': /^[A-Za-z0-9]{5,15}$/, // ICICI: 5-15 alphanumeric characters
-                'axis': /^[A-Za-z0-9]{6,12}$/  // Axis: 6-12 alphanumeric characters
-            };
-            
-            const regex = userIdRegex[bank];
-            return regex.test(userId) ? '' : `Invalid User ID for ${bank.toUpperCase()}. Must be ${bank === 'sbi' ? '6-15' : bank === 'hdfc' ? '8-20' : bank === 'icici' ? '5-15' : '6-12'} alphanumeric characters`;
-        }
-    
-        // UPI ID Validation
-        function validateUpiId(upiId, vpa) {
-            if (!upiId.trim()) return 'Please enter your UPI ID';
-            
-            const upiRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+$/;
-            if (!upiRegex.test(upiId)) return 'Invalid UPI ID format';
-            
-            if (!upiId.endsWith(vpa)) return `UPI ID must end with ${vpa}`;
-            
-            const handle = upiId.split('@')[0];
-            if (handle.length < 3 || handle.length > 50) return 'UPI handle must be between 3 and 50 characters';
-            
-            return '';
-        }
-    
-        // Wallet Mobile Number Validation
-        function validateWalletMobile(mobile) {
-            const mobileRegex = /^[6-9]\d{9}$/;
-            return mobileRegex.test(mobile) ? '' : 'Please enter a valid 10-digit mobile number';
-        }
-    
-        // Add form validation for mobile number
-        function validateMobileNumber(number) {
-            const mobileRegex = /^[6-9]\d{9}$/;
-            return mobileRegex.test(number);
-        }
-    
-        window.addEventListener('load', () => {
-            // Get stored values
-            const selectedPlan = sessionStorage.getItem('selectedPlan');
-            const selectedPrice = sessionStorage.getItem('selectedPrice');
-            const mobileNumber = sessionStorage.getItem('mobileNumber');
-    
-            // Update the payment summary section
-            if (mobileNumber) {
-                const prepaidNumberElement = document.querySelector('.prepaid-number');
-                if (prepaidNumberElement) {
-                    prepaidNumberElement.textContent = `prepaid | ${mobileNumber}`;
-                }
-            }
-    
-            if (selectedPlan) {
-                const planDetailsElement = document.querySelector('.data-details');
-                if (planDetailsElement) {
-                    planDetailsElement.textContent = selectedPlan;
-                }
-            }
-    
-            if (selectedPrice) {
-                const amountElement = document.querySelector('.amount span:last-child');
-                if (amountElement) {
-                    amountElement.textContent = selectedPrice;
-                }
-            }
-        });
-    
-        // Modified processPayment to include additional data
-        function processPayment(type, provider = '') {
-            const mobileNumber = sessionStorage.getItem('mobileNumber');
-    
-            if (!mobileNumber || !validateMobileNumber(mobileNumber)) {
-                alert('Please enter a valid mobile number');
-                window.location.href = '../html/viewplans2.html';
-                return;
-            }
-    
-            const button = document.querySelector(`#${type}Form .submit-button`) ||
-                document.querySelector('.submit-button');
-    
-            if (button) {
-                setLoadingState(button, true);
-            }
-    
-            // Get current plan and price details
-            const planDetails = document.querySelector('.data-details').textContent;
-            const amount = document.querySelector('.amount span:last-child').textContent;
-    
-            // Store transaction details
-            const transactionDetails = {
-                type,
-                provider,
-                amount,
-                planDetails,
-                mobileNumber,
-                timestamp: new Date().toLocaleString('en-IN', {
-                    day: '2-digit',
-                    month: 'short',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: true
-                }),
-                transactionId: 'MOB' + Date.now()
-            };
-    
-            // Add additional details based on payment type
-            if (type === 'netbanking') {
-                const userId = document.getElementById('netbankingUserId')?.value;
-                transactionDetails.netbankingUserId = userId;
-            } else if (type === 'upi') {
-                const upiId = document.getElementById('upiId')?.value;
-                transactionDetails.upiId = upiId;
-            } else if (type === 'wallet') {
-                const walletMobile = document.getElementById('walletMobile')?.value;
-                transactionDetails.walletMobile = walletMobile;
-            }
-    
-            // Store transaction details in sessionStorage
-            Object.entries(transactionDetails).forEach(([key, value]) => {
-                sessionStorage.setItem(key, value);
+                `;
+                option.parentElement.appendChild(upiForm);
+
+                const upiIdInput = document.getElementById('upiId');
+                upiIdInput.addEventListener('input', function() {
+                    const error = validateUpiId(this.value, vpa);
+                    this.nextElementSibling.textContent = error;
+                });
+
+                const upiFormElement = document.getElementById('upiForm');
+                upiFormElement.addEventListener('submit', (event) => {
+                    event.preventDefault();
+                    const error = validateUpiId(upiIdInput.value, vpa);
+                    upiIdInput.nextElementSibling.textContent = error;
+
+                    if (!error) {
+                        processPayment('upi', provider);
+                    }
+                });
             });
-    
-            // Show processing message and redirect
-            const processingMessage = document.createElement('div');
-            processingMessage.style.cssText = `
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: rgba(0, 0, 0, 0.8);
-                color: white;
-                padding: 20px;
-                border-radius: 8px;
-                z-index: 1000;
-            `;
-            processingMessage.textContent = 'Processing payment...';
-            document.body.appendChild(processingMessage);
-    
-            setTimeout(() => {
-                if (button) {
-                    setLoadingState(button, false);
-                }
-                document.body.removeChild(processingMessage);
-                window.location.href = "user-successfulrechargepage.html";
-            }, 2000);
-        }
-    
-        const paymentOptionsContainer = document.querySelector('.payment-options');
-    
-        // Create payment options
-        paymentOptions.forEach(option => {
-            const optionElement = document.createElement('div');
-            optionElement.className = 'payment-option';
-            optionElement.innerHTML = `
-                <div class="payment-option-header">
-                    <div class="option-left">
-                        ${option.icon}
-                        <span>${option.title}</span>
-                    </div>
-                    <span class="arrow">▼</span>
-                </div>
-                <div class="payment-content">
-                    ${option.id === 'upi' ? `
-                        <div class="upi-options">
-                            ${option.options.map(upiOption => `
-                                <div class="upi-option">
-                                    <div class="upi-icon" style="background-color: ${upiOption.color}">
-                                        ${upiOption.name.charAt(0)}
-                                    </div>
-                                    <span class="upi-name">${upiOption.name}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    ` : option.fields || ''}
-                </div>
-            `;
-    
-            paymentOptionsContainer.appendChild(optionElement);
         });
-    
-        // Handle payment option clicks
-        document.querySelectorAll('.payment-option').forEach(option => {
+
+        const walletOptions = document.querySelectorAll('.wallet-option');
+        walletOptions.forEach(option => {
             option.addEventListener('click', (e) => {
-                if (e.target.closest('form')) return; // Don't close when clicking form elements
-    
-                const wasActive = option.classList.contains('active');
-    
-                // Close all options
-                document.querySelectorAll('.payment-option').forEach(opt => {
-                    opt.classList.remove('active');
-                });
-    
-                // Toggle clicked option
-                if (!wasActive) {
-                    option.classList.add('active');
-                }
-            });
-        });
-    
-        function setLoadingState(button, isLoading) {
-            if (isLoading) {
-                button.disabled = true;
-                button.textContent = 'Processing...';
-            } else {
-                button.disabled = false;
-                button.textContent = 'Pay Now';
-            }
-        }
-    
-        // Add event listeners for mobile menu, login dropdown, and payment validations
-        document.addEventListener('DOMContentLoaded', () => {
-            const menuToggle = document.getElementById('mobileMenuBtn');
-            const navbar = document.getElementById('navbar');
-            const loginBtn = document.getElementById('loginBtn');
-            const loginDropdown = document.getElementById('loginDropdown');
-    
-            menuToggle.addEventListener('click', () => {
-                navbar.classList.toggle('active');
-            });
-    
-            loginBtn.addEventListener('click', () => {
-                loginDropdown.style.display = loginDropdown.style.display === 'block' ? 'none' : 'block';
-            });
-    
-            document.addEventListener('click', (e) => {
-                if (!loginBtn.contains(e.target) && !loginDropdown.contains(e.target)) {
-                    loginDropdown.style.display = 'none';
-                }
-                if (window.innerWidth <= 768 && navbar.classList.contains('active')) {
-                    if (!navbar.contains(e.target) && !menuToggle.contains(e.target)) {
-                        navbar.classList.remove('active');
-                    }
-                }
-            });
-    
-            // Card form validation
-            const cardForm = document.getElementById('cardForm');
-            if (cardForm) {
-                const cardNumber = document.getElementById('cardNumber');
-                const expiryDate = document.getElementById('expiryDate');
-                const cvv = document.getElementById('cvv');
-                const cardName = document.getElementById('cardName');
-                
-                // Format expiry date as user types
-                expiryDate.addEventListener('input', function(e) {
-                    let value = e.target.value.replace(/\D/g, '');
-                    if (value.length > 2) {
-                        value = value.slice(0, 2) + '/' + value.slice(2, 4);
-                    }
-                    e.target.value = value;
-                });
-                
-                // Validate card number as user types
-                cardNumber.addEventListener('input', function() {
-                    const error = validateCardNumber(this.value);
+                e.stopPropagation();
+
+                const walletFormContainer = document.getElementById('walletFormContainer');
+                walletFormContainer.style.display = 'block';
+
+                const walletMobile = document.getElementById('walletMobile');
+                const walletName = option.dataset.wallet;
+
+                walletMobile.addEventListener('input', function() {
+                    const error = validateWalletMobile(this.value);
                     this.nextElementSibling.textContent = error;
                 });
-                
-                // Validate expiry date as user types
-                expiryDate.addEventListener('input', function() {
-                    const error = validateExpiryDate(this.value);
-                    this.nextElementSibling.textContent = error;
-                });
-                
-                // Validate CVV as user types
-                cvv.addEventListener('input', function() {
-                    const error = validateCVV(this.value);
-                    this.nextElementSibling.textContent = error;
-                });
-                
-                // Validate name as user types
-                cardName.addEventListener('input', function() {
-                    const error = validateCardName(this.value);
-                    this.nextElementSibling.textContent = error;
-                });
-                
-                cardForm.addEventListener('submit', (event) => {
+
+                const walletForm = document.getElementById('walletForm');
+                walletForm.addEventListener('submit', (event) => {
                     event.preventDefault();
-                    
-                    // Validate all fields before submission
-                    const cardNumberError = validateCardNumber(cardNumber.value);
-                    const expiryDateError = validateExpiryDate(expiryDate.value);
-                    const cvvError = validateCVV(cvv.value);
-                    const cardNameError = validateCardName(cardName.value);
-                    
-                    cardNumber.nextElementSibling.textContent = cardNumberError;
-                    expiryDate.nextElementSibling.textContent = expiryDateError;
-                    cvv.nextElementSibling.textContent = cvvError;
-                    cardName.nextElementSibling.textContent = cardNameError;
-                    
-                    // Only process payment if all validations pass
-                    if (!cardNumberError && !expiryDateError && !cvvError && !cardNameError) {
-                        processPayment('card');
+                    const error = validateWalletMobile(walletMobile.value);
+                    walletMobile.nextElementSibling.textContent = error;
+
+                    if (!error) {
+                        processPayment('wallet', walletName);
                     }
-                });
-            }
-    
-            // Net Banking: Show user ID field after bank selection and validate
-            const netbankingForm = document.getElementById('netbankingForm');
-            if (netbankingForm) {
-                const bankSelect = document.getElementById('bankSelect');
-                const userIdGroup = document.getElementById('netbankingUserIdGroup');
-                const userIdInput = document.getElementById('netbankingUserId');
-    
-                bankSelect.addEventListener('change', function() {
-                    this.nextElementSibling.textContent = this.value ? '' : 'Please select a bank';
-                    userIdGroup.style.display = this.value ? 'block' : 'none';
-                    userIdInput.value = ''; // Reset user ID when bank changes
-                });
-    
-                userIdInput.addEventListener('input', function() {
-                    const error = validateNetbankingUserId(this.value, bankSelect.value);
-                    this.nextElementSibling.textContent = error;
-                });
-    
-                netbankingForm.addEventListener('submit', (event) => {
-                    event.preventDefault();
-    
-                    const bankError = bankSelect.value ? '' : 'Please select a bank';
-                    const userIdError = validateNetbankingUserId(userIdInput.value, bankSelect.value);
-    
-                    bankSelect.nextElementSibling.textContent = bankError;
-                    userIdInput.nextElementSibling.textContent = userIdError;
-    
-                    if (!bankError && !userIdError) {
-                        processPayment('netbanking', bankSelect.value);
-                    }
-                });
-            }
-    
-            // UPI: Show UPI ID input after selecting a platform and validate
-            const upiOptions = document.querySelectorAll('.upi-option');
-            upiOptions.forEach(option => {
-                option.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Prevent closing the payment option
-    
-                    const provider = option.querySelector('.upi-name').textContent;
-                    const vpa = paymentOptions.find(opt => opt.id === 'upi').options.find(opt => opt.name === provider).vpa;
-                    
-                    // Remove existing UPI form if any
-                    const existingForm = option.parentElement.querySelector('.upi-form');
-                    if (existingForm) existingForm.remove();
-    
-                    // Add UPI ID input form
-                    const upiForm = document.createElement('div');
-                    upiForm.className = 'upi-form';
-                    upiForm.innerHTML = `
-                        <form id="upiForm" class="payment-form">
-                            <div class="form-group">
-                                <input type="text" id="upiId" placeholder="Enter UPI ID (e.g., yourname${vpa})">
-                                <span class="error-message"></span>
-                            </div>
-                            <button type="submit" class="submit-button">Pay Now</button>
-                        </form>
-                    `;
-                    option.parentElement.appendChild(upiForm);
-    
-                    const upiIdInput = document.getElementById('upiId');
-                    upiIdInput.addEventListener('input', function() {
-                        const error = validateUpiId(this.value, vpa);
-                        this.nextElementSibling.textContent = error;
-                    });
-    
-                    const upiFormElement = document.getElementById('upiForm');
-                    upiFormElement.addEventListener('submit', (event) => {
-                        event.preventDefault();
-                        const error = validateUpiId(upiIdInput.value, vpa);
-                        upiIdInput.nextElementSibling.textContent = error;
-    
-                        if (!error) {
-                            processPayment('upi', provider);
-                        }
-                    });
-                });
-            });
-    
-            // Wallet: Show mobile number input after selecting a wallet and validate
-            const walletOptions = document.querySelectorAll('.wallet-option');
-            walletOptions.forEach(option => {
-                option.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Prevent closing the payment option
-    
-                    const walletFormContainer = document.getElementById('walletFormContainer');
-                    walletFormContainer.style.display = 'block';
-    
-                    const walletMobile = document.getElementById('walletMobile');
-                    const walletName = option.dataset.wallet;
-    
-                    walletMobile.addEventListener('input', function() {
-                        const error = validateWalletMobile(this.value);
-                        this.nextElementSibling.textContent = error;
-                    });
-    
-                    const walletForm = document.getElementById('walletForm');
-                    walletForm.addEventListener('submit', (event) => {
-                        event.preventDefault();
-                        const error = validateWalletMobile(walletMobile.value);
-                        walletMobile.nextElementSibling.textContent = error;
-    
-                        if (!error) {
-                            processPayment('wallet', walletName);
-                        }
-                    });
                 });
             });
         });
-    </script>
+    });
+</script>
     </body>
 </html>

@@ -359,10 +359,27 @@
             background: var(--background);
             color: var(--text-dark);
         }
-
+        
         .secondary-btn:hover {
             background: var(--border);
         }
+        .action-btn.secondary-btn {
+    background-color: #6a8aff; /* Change this to your desired color */
+    color: white; /* Text color */
+    border: none; /* Remove border */
+    padding: 4px 5px; /* Padding for the button */
+    text-align: center; /* Center text */
+    text-decoration: none; /* Remove underline from text */
+    display: inline-block; /* Display inline */
+    font-size: 14px; /* Font size */
+    margin: 4px 2px; /* Margin around the button */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 5px; /* Rounded corners */
+}
+
+.action-btn.secondary-btn:hover {
+    background-color: #8385c6; /* Darker shade on hover */
+}
 
         .action-btn.secondary-btn.send-reminder-btn {
             background-color: #4a5c92;
@@ -1076,8 +1093,8 @@
 
                     <!-- Plans Section -->
                     <div id="plans-tab" class="tab-content" style="display: none;">
-                        <button class="action-btn primary-btn" onclick="showAddPlanForm()">Add New Plan</button>
                         <button class="action-btn secondary-btn" onclick="showAddCategoryForm()">Manage Categories</button>
+                        <button class="action-btn primary-btn" onclick="showAddPlanForm()">Add New Plan</button>
                         <div id="add-category-form" class="form-container" style="display:none">
                             <h2>Add New Category</h2>
                             <form id="categoryForm">
