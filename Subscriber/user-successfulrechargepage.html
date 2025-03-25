@@ -6,8 +6,7 @@
     <title>Recharge Successful - Mobi-Comm</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-                @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
         :root {
             --primary: #4361ee;
@@ -27,7 +26,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
@@ -223,6 +222,7 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
+            background-color: var(--success);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -239,10 +239,9 @@
             }
         }
 
-        .success-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
+        .success-icon i {
+            color: white;
+            font-size: 40px;
         }
 
         .success-message {
@@ -275,7 +274,7 @@
         }
 
         .transaction-card {
-            background: var(--white);
+            background: white;
             border-radius: 12px;
             padding: 20px;
             width: 100%;
@@ -400,7 +399,7 @@
 
         .modal-content {
             position: relative;
-            background-color: var(--white);
+            background-color: white;
             margin: 15% auto;
             padding: 20px;
             width: 90%;
@@ -589,18 +588,17 @@
 
     <div class="breadcrumbs">
         <a href="../index.html">Home </a> 
-        <span>&#47;</span> 
+        <span>/</span> 
         <a href="user-rechargepage.html" style="text-decoration: none;">View plans</a> 
-        <span>&#47;</span> 
+        <span>/</span> 
         <a href="user-paymentpage.html">Payment Interface</a> 
-        <span>&#47;</span> 
+        <span>/</span> 
         Receipt
     </div>
-    
 
     <div class="success-container">
         <div class="success-icon">
-            <img src="../Assets/success_checkmark.png" alt="Success Checkmark">
+            <i class="fas fa-check"></i>
         </div>
 
         <div class="success-message">
@@ -652,6 +650,7 @@
                 Share Receipt
             </button>
         </div>
+
         <div id="shareModal" class="modal">
             <div class="modal-content">
                 <span class="close-button" onclick="closeShareModal()">×</span>
@@ -702,82 +701,135 @@
             const bubble = document.createElement('div');
             bubble.classList.add('bubble');
 
-            const size = Math.random() * 50 + 20; // Random size between 20px and 70px
+            const size = Math.random() * 50 + 20;
             bubble.style.width = `${size}px`;
             bubble.style.height = `${size}px`;
 
-            bubble.style.left = `${Math.random() * 100}%`; // Random horizontal position
-
-            const animationDuration = Math.random() * 10 + 5; // Random duration between 5s and 15s
+            bubble.style.left = `${Math.random() * 100}%`;
+            const animationDuration = Math.random() * 10 + 5;
             bubble.style.animationDuration = `${animationDuration}s`;
-
-            bubble.style.animationDelay = `${Math.random() * -5}s`; // Random delay
+            bubble.style.animationDelay = `${Math.random() * -5}s`;
 
             bubblesContainer.appendChild(bubble);
         }
 
+        // Format payment method for display
+        function formatPaymentMethod(method) {
+            const methodMap = {
+                'card': 'Credit/Debit Card',
+                'upi': 'UPI',
+                'netbanking': 'Net Banking',
+                'wallet': 'Wallet',
+                'paylater': 'Pay Later'
+            };
+            console.log('Formatting Payment Method - Input:', method); // Debug log
+            const formattedMethod = methodMap[method] || method || 'Unknown';
+            console.log('Formatted Payment Method - Output:', formattedMethod); // Debug log
+            return formattedMethod; // Fallback to raw method or 'Unknown' if undefined
+        }
+
+        // Download PDF
         function downloadPDF() {
             const pdfContainer = document.createElement('div');
-            pdfContainer.style.padding = '20px';
-            pdfContainer.style.maxWidth = '600px';
+            pdfContainer.style.padding = '30px';
+            pdfContainer.style.maxWidth = '800px';
             pdfContainer.style.margin = '0 auto';
-            pdfContainer.style.height = 'auto';
-            pdfContainer.style.overflow = 'visible';
+            pdfContainer.style.background = '#ffffff';
+            pdfContainer.style.fontFamily = 'Arial, sans-serif';
+            pdfContainer.style.lineHeight = '1.5';
 
             const header = document.createElement('div');
-            header.style.textAlign = 'center';
-            header.style.marginBottom = '20px';
-            header.innerHTML = `
-                <h2 style="color: #4361ee; margin-bottom: 10px; font-size: 24px;">Mobi-Comm</h2>
-                <div style="width: 100%; height: 2px; background: #4361ee; margin: 10px 0;"></div>
-                <h3 style="color: #4361ee; margin-top: 10px;">Recharge Receipt</h3>
+            header.style.display = 'flex';
+            header.style.alignItems = 'center';
+            header.style.justifyContent = 'space-between';
+            header.style.borderBottom = '2px solid #4361ee';
+            header.style.paddingBottom = '15px';
+            header.style.marginBottom = '25px';
+
+            const logoText = document.createElement('div');
+            logoText.innerHTML = `
+                <h1 style="color: #4361ee; font-size: 28px; font-weight: bold; margin: 0;">Mobi-Comm</h1>
+                <p style="color: #666; font-size: 12px; margin: 0;">Your Trusted Recharge Partner</p>
             `;
+            header.appendChild(logoText);
+
+            const receiptTitle = document.createElement('div');
+            receiptTitle.innerHTML = `
+                <h2 style="color: #212529; font-size: 20px; font-weight: 600; margin: 0;">Recharge Receipt</h2>
+                <p style="color: #4361ee; font-size: 14px; margin: 0;">Generated on ${new Date().toLocaleDateString()}</p>
+            `;
+            receiptTitle.style.textAlign = 'right';
+            header.appendChild(receiptTitle);
+
             pdfContainer.appendChild(header);
 
             const transactionId = sessionStorage.getItem('transactionId');
             const successMessage = document.createElement('div');
             successMessage.style.textAlign = 'center';
-            successMessage.style.marginBottom = '15px';
+            successMessage.style.marginBottom = '30px';
+            successMessage.style.background = '#e6f3ff';
+            successMessage.style.padding = '15px';
+            successMessage.style.borderRadius = '8px';
             successMessage.innerHTML = `
-                <p style="color: #4361ee; font-size: 18px; margin-bottom: 5px;">✓ Recharge Successful!</p>
-                <p style="color: #666; margin-bottom: 5px;">Transaction ID: ${transactionId || 'N/A'}</p>
+                <p style="color: #4361ee; font-size: 18px; font-weight: 600; margin: 0;">✓ Recharge Successful!</p>
+                <p style="color: #333; font-size: 14px; margin: 5px 0 0;">Transaction ID: <strong>${transactionId || 'N/A'}</strong></p>
             `;
             pdfContainer.appendChild(successMessage);
 
             const table = document.createElement('table');
             table.style.width = '100%';
             table.style.borderCollapse = 'collapse';
-            table.style.marginTop = '15px';
+            table.style.marginBottom = '25px';
+            table.style.background = '#f8f9fa';
+            table.style.borderRadius = '8px';
+            table.style.boxShadow = '0 2px 5px rgba(0,0,0,0.05)';
 
             const mobileNumber = sessionStorage.getItem('mobileNumber');
             const planDetails = sessionStorage.getItem('planDetails');
             const amount = sessionStorage.getItem('amount');
-            const paymentType = sessionStorage.getItem('type');
+            const rawPaymentMethod = sessionStorage.getItem('paymentMethod');
+            const paymentMethod = formatPaymentMethod(rawPaymentMethod);
             const timestamp = sessionStorage.getItem('timestamp');
 
             const transactionData = [
                 { label: 'Mobile Number', value: mobileNumber },
                 { label: 'Plan Details', value: planDetails },
                 { label: 'Amount', value: amount },
-                { label: 'Payment Method', value: paymentType },
+                { label: 'Payment Method', value: paymentMethod },
                 { label: 'Date & Time', value: timestamp }
             ];
+
+            const headerRow = table.insertRow();
+            headerRow.style.background = '#4361ee';
+            headerRow.style.color = '#ffffff';
+            const labelHeader = headerRow.insertCell(0);
+            const valueHeader = headerRow.insertCell(1);
+            labelHeader.style.padding = '10px';
+            labelHeader.style.fontWeight = 'bold';
+            labelHeader.style.fontSize = '14px';
+            labelHeader.style.width = '40%';
+            valueHeader.style.padding = '10px';
+            valueHeader.style.fontWeight = 'bold';
+            valueHeader.style.fontSize = '14px';
+            labelHeader.textContent = 'Description';
+            valueHeader.textContent = 'Details';
 
             transactionData.forEach(item => {
                 const row = table.insertRow();
                 const labelCell = row.insertCell(0);
                 const valueCell = row.insertCell(1);
 
-                labelCell.style.padding = '8px';
-                labelCell.style.borderBottom = '1px solid #eee';
-                labelCell.style.width = '40%';
-                labelCell.style.color = '#666';
+                labelCell.style.padding = '12px';
+                labelCell.style.borderBottom = '1px solid #e9ecef';
+                labelCell.style.color = '#6c757d';
+                labelCell.style.fontSize = '14px';
                 labelCell.style.textAlign = 'left';
 
-                valueCell.style.padding = '8px';
-                valueCell.style.borderBottom = '1px solid #eee';
-                valueCell.style.color = '#333';
-                valueCell.style.fontWeight = 'bold';
+                valueCell.style.padding = '12px';
+                valueCell.style.borderBottom = '1px solid #e9ecef';
+                valueCell.style.color = '#212529';
+                valueCell.style.fontSize = '14px';
+                valueCell.style.fontWeight = '500';
                 valueCell.style.textAlign = 'left';
 
                 labelCell.textContent = item.label;
@@ -787,22 +839,23 @@
             pdfContainer.appendChild(table);
 
             const footer = document.createElement('div');
-            footer.style.marginTop = '20px';
             footer.style.textAlign = 'center';
-            footer.style.color = '#666';
-            footer.style.fontSize = '11px';
+            footer.style.color = '#6c757d';
+            footer.style.fontSize = '12px';
+            footer.style.borderTop = '1px solid #e9ecef';
+            footer.style.paddingTop = '15px';
             footer.innerHTML = `
-                <p>This is a computer generated receipt and doesn't require signature.</p>
-                <p>For support, contact: support@mobicomm.com</p>
+                <p style="margin: 0;">This is a computer-generated receipt and does not require a signature.</p>
+                <p style="margin: 5px 0 0;">For support, contact: <a href="mailto:support@mobicomm.com" style="color: #4361ee; text-decoration: none;">support@mobicomm.com</a> | Website: <a href="https://www.mobicomm.com" style="color: #4361ee; text-decoration: none;">www.mobicomm.com</a></p>
             `;
             pdfContainer.appendChild(footer);
 
             const opt = {
-                margin: [0.3, 0.3, 0.5, 0.3],
-                filename: `recharge-receipt-${Date.now()}.pdf`,
+                margin: [0.5, 0.5, 0.5, 0.5],
+                filename: `recharge-receipt-${transactionId || Date.now()}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: {
-                    scale: 1.5,
+                    scale: 2,
                     logging: true,
                     letterRendering: true,
                     useCORS: true,
@@ -823,6 +876,7 @@
                 .catch(err => console.error('PDF generation failed:', err));
         }
 
+        // Share options
         function showShareOptions() {
             document.getElementById('shareModal').style.display = 'block';
         }
@@ -860,9 +914,7 @@
             const toast = document.createElement('div');
             toast.className = 'toast';
             toast.textContent = message;
-
             document.body.appendChild(toast);
-
             setTimeout(() => {
                 toast.remove();
             }, 3000);
@@ -871,7 +923,6 @@
         function copyLink() {
             const transactionId = sessionStorage.getItem('transactionId');
             const receiptLink = `Recharge successful! Transaction ID: ${transactionId}`;
-            
             navigator.clipboard.writeText(receiptLink).then(() => {
                 showToast('Link copied to clipboard!');
             }).catch(err => {
@@ -880,27 +931,32 @@
             closeShareModal();
         }
 
+        // Load transaction details on page load
         document.addEventListener('DOMContentLoaded', function() {
             const mobileNumber = sessionStorage.getItem('mobileNumber');
             const planDetails = sessionStorage.getItem('planDetails');
             const amount = sessionStorage.getItem('amount');
-            const paymentType = sessionStorage.getItem('type');
+            const rawPaymentMethod = sessionStorage.getItem('paymentMethod');
+            console.log('Retrieved Payment Method from sessionStorage:', rawPaymentMethod); // Debug log
+            const paymentMethod = formatPaymentMethod(rawPaymentMethod); // Format payment method
             const timestamp = sessionStorage.getItem('timestamp');
             const transactionId = sessionStorage.getItem('transactionId');
 
-            document.getElementById('mobileNumber').textContent = mobileNumber;
-            document.getElementById('planDetails').textContent = planDetails;
-            document.getElementById('amount').textContent = amount;
-            document.getElementById('paymentType').textContent = paymentType;
-            document.getElementById('currentDateTime').textContent = timestamp;
-            document.getElementById('transactionId').textContent = transactionId;
+            // Display the data on the page
+            document.getElementById('mobileNumber').textContent = mobileNumber || 'N/A';
+            document.getElementById('planDetails').textContent = planDetails || 'N/A';
+            document.getElementById('amount').textContent = amount || 'N/A';
+            document.getElementById('paymentType').textContent = paymentMethod;
+            document.getElementById('currentDateTime').textContent = timestamp || 'N/A';
+            document.getElementById('transactionId').textContent = transactionId || 'N/A';
 
+            // Event listeners for share options
             document.querySelector('.share-option.whatsapp').addEventListener('click', shareOnWhatsApp);
             document.querySelector('.share-option.email').addEventListener('click', shareViaEmail);
             document.querySelector('.share-option.telegram').addEventListener('click', shareOnTelegram);
             document.querySelector('.share-option.copy').addEventListener('click', copyLink);
 
-            // Mobile menu and login dropdown functionality
+            // Navigation and dropdown event listeners
             const menuToggle = document.getElementById('mobileMenuBtn');
             const navbar = document.getElementById('navbar');
             const loginBtn = document.getElementById('loginBtn');
