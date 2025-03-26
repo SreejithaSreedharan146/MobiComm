@@ -752,41 +752,43 @@
         }
 
        // Render plans to the table
-    function renderPlans(filteredPlans) {
-        plansContainer.innerHTML = '';
+       function renderPlans(filteredPlans) {
+    plansContainer.innerHTML = '';
 
-        if (filteredPlans.length === 0) {
-            plansContainer.innerHTML = '<tr><td colspan="5" class="no-results">No plans found. Try a different filter or search term.</td></tr>';
-            return;
-        }
-
-        filteredPlans.forEach((plan) => {
-            const planRow = document.createElement('tr');
-            planRow.innerHTML = `
-                <td>${plan.category}</td>
-                <td>₹${plan.price}</td>
-                <td>${plan.validity} Days</td>
-                <td>
-                    <ul class="plan-features">
-                        ${plan.features.map(feature => `<li>${feature}</li>`).join('')}
-                    </ul>
-                </td>
-                <td>
-                    <button class="buy-button" data-plan="${encodeURIComponent(`${plan.validity} Days • ${plan.features[0] || 'No features'}`)}" data-price="₹${plan.price}">Buy Now</button>
-                </td>
-            `;
-            plansContainer.appendChild(planRow);
-        });
-
-        // Add event listeners to buy buttons after rendering
-        document.querySelectorAll('.buy-button').forEach(button => {
-            button.addEventListener('click', () => {
-                const planDetails = decodeURIComponent(button.getAttribute('data-plan'));
-                const price = button.getAttribute('data-price');
-                selectPlan(planDetails, price);
-            });
-        });
+    if (filteredPlans.length === 0) {
+        plansContainer.innerHTML = '<tr><td colspan="5" class="no-results">No plans found. Try a different filter or search term.</td></tr>';
+        return;
     }
+
+    filteredPlans.forEach((plan) => {
+        const planRow = document.createElement('tr');
+        // Join all features into a single string, separated by " • "
+        const allFeatures = plan.features.length > 0 ? plan.features.join(' • ') : 'No features';
+        planRow.innerHTML = `
+            <td>${plan.category}</td>
+            <td>₹${plan.price}</td>
+            <td>${plan.validity} Days</td>
+            <td>
+                <ul class="plan-features">
+                    ${plan.features.map(feature => `<li>${feature}</li>`).join('')}
+                </ul>
+            </td>
+            <td>
+                <button class="buy-button" data-plan="${encodeURIComponent(`${plan.validity} Days • ${allFeatures}`)}" data-price="₹${plan.price}">Buy Now</button>
+            </td>
+        `;
+        plansContainer.appendChild(planRow);
+    });
+
+    // Add event listeners to buy buttons after rendering
+    document.querySelectorAll('.buy-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const planDetails = decodeURIComponent(button.getAttribute('data-plan'));
+            const price = button.getAttribute('data-price');
+            selectPlan(planDetails, price);
+        });
+    });
+}
 
         // Handle plan selection
         function selectPlan(planDetails, price) {

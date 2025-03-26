@@ -932,55 +932,77 @@
         }
 
         // Load transaction details on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileNumber = sessionStorage.getItem('mobileNumber');
-            const planDetails = sessionStorage.getItem('planDetails');
-            const amount = sessionStorage.getItem('amount');
-            const rawPaymentMethod = sessionStorage.getItem('paymentMethod');
-            console.log('Retrieved Payment Method from sessionStorage:', rawPaymentMethod); // Debug log
-            const paymentMethod = formatPaymentMethod(rawPaymentMethod); // Format payment method
-            const timestamp = sessionStorage.getItem('timestamp');
-            const transactionId = sessionStorage.getItem('transactionId');
+       // Load transaction details on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileNumber = sessionStorage.getItem('mobileNumber');
+    let planDetails = sessionStorage.getItem('planDetails');
+    const amount = sessionStorage.getItem('amount');
+    const rawPaymentMethod = sessionStorage.getItem('paymentMethod');
+    console.log('Retrieved Payment Method from sessionStorage:', rawPaymentMethod); // Debug log
+    const paymentMethod = formatPaymentMethod(rawPaymentMethod); // Format payment method
+    const timestamp = sessionStorage.getItem('timestamp');
+    const transactionId = sessionStorage.getItem('transactionId');
 
-            // Display the data on the page
-            document.getElementById('mobileNumber').textContent = mobileNumber || 'N/A';
-            document.getElementById('planDetails').textContent = planDetails || 'N/A';
-            document.getElementById('amount').textContent = amount || 'N/A';
-            document.getElementById('paymentType').textContent = paymentMethod;
-            document.getElementById('currentDateTime').textContent = timestamp || 'N/A';
-            document.getElementById('transactionId').textContent = transactionId || 'N/A';
+    // Format the planDetails for display
+    const planDetailsElement = document.getElementById('planDetails');
+    if (planDetails) {
+        const planParts = planDetails.split('•').map(part => part.trim()).filter(part => part !== '');
+        const validity = planParts[0] || 'Unknown validity';
+        const features = planParts.slice(1);
 
-            // Event listeners for share options
-            document.querySelector('.share-option.whatsapp').addEventListener('click', shareOnWhatsApp);
-            document.querySelector('.share-option.email').addEventListener('click', shareViaEmail);
-            document.querySelector('.share-option.telegram').addEventListener('click', shareOnTelegram);
-            document.querySelector('.share-option.copy').addEventListener('click', copyLink);
+        // Keep validity and first feature (e.g., "3GB/day") on the same line
+        // Put remaining features on new lines
+        let formattedPlanDetails = validity;
+        if (features.length > 0) {
+            formattedPlanDetails += ` • ${features[0]}`; // First feature on the same line
+            if (features.length > 1) {
+                // Add remaining features on new lines
+                formattedPlanDetails += '<br>' + features.slice(1).map(feature => `• ${feature}`).join('<br>');
+            }
+        }
+        planDetailsElement.innerHTML = formattedPlanDetails; // Use innerHTML to render <br> tags
+    } else {
+        planDetailsElement.textContent = 'N/A';
+    }
 
-            // Navigation and dropdown event listeners
-            const menuToggle = document.getElementById('mobileMenuBtn');
-            const navbar = document.getElementById('navbar');
-            const loginBtn = document.getElementById('loginBtn');
-            const loginDropdown = document.getElementById('loginDropdown');
+    // Display the remaining data on the page
+    document.getElementById('mobileNumber').textContent = mobileNumber || 'N/A';
+    document.getElementById('amount').textContent = amount || 'N/A';
+    document.getElementById('paymentType').textContent = paymentMethod;
+    document.getElementById('currentDateTime').textContent = timestamp || 'N/A';
+    document.getElementById('transactionId').textContent = transactionId || 'N/A';
 
-            menuToggle.addEventListener('click', () => {
-                navbar.classList.toggle('active');
-            });
+    // Event listeners for share options
+    document.querySelector('.share-option.whatsapp').addEventListener('click', shareOnWhatsApp);
+    document.querySelector('.share-option.email').addEventListener('click', shareViaEmail);
+    document.querySelector('.share-option.telegram').addEventListener('click', shareOnTelegram);
+    document.querySelector('.share-option.copy').addEventListener('click', copyLink);
 
-            loginBtn.addEventListener('click', () => {
-                loginDropdown.style.display = loginDropdown.style.display === 'block' ? 'none' : 'block';
-            });
+    // Navigation and dropdown event listeners
+    const menuToggle = document.getElementById('mobileMenuBtn');
+    const navbar = document.getElementById('navbar');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginDropdown = document.getElementById('loginDropdown');
 
-            document.addEventListener('click', (e) => {
-                if (!loginBtn.contains(e.target) && !loginDropdown.contains(e.target)) {
-                    loginDropdown.style.display = 'none';
-                }
-                if (window.innerWidth <= 768 && navbar.classList.contains('active')) {
-                    if (!navbar.contains(e.target) && !menuToggle.contains(e.target)) {
-                        navbar.classList.remove('active');
-                    }
-                }
-            });
-        });
+    menuToggle.addEventListener('click', () => {
+        navbar.classList.toggle('active');
+    });
+
+    loginBtn.addEventListener('click', () => {
+        loginDropdown.style.display = loginDropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!loginBtn.contains(e.target) && !loginDropdown.contains(e.target)) {
+            loginDropdown.style.display = 'none';
+        }
+        if (window.innerWidth <= 768 && navbar.classList.contains('active')) {
+            if (!navbar.contains(e.target) && !menuToggle.contains(e.target)) {
+                navbar.classList.remove('active');
+            }
+        }
+    });
+});
     </script>
 </body>
 </html>

@@ -267,23 +267,31 @@
         }
 
         .submit-button {
-            background-color: #007bff;
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 1rem;
-            transition: background-color 0.3s ease;
-            width: 50%;
-            margin-left: 130px;
-            margin-top: 20px;
-        }
+    background: linear-gradient(90deg, #007bff, #00c4ff);
+    color: white;
+    padding: 10px 20px; /* Reduced padding for a smaller size */
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem; /* Smaller font size */
+    transition: all 0.3s ease;
+    width: 40%; /* Reduced width */
+    margin: 30px auto;
+    display: block;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+}
 
-        .submit-button:hover {
-            background-color: #0056b3;
-        }
+.submit-button:hover {
+    background: linear-gradient(90deg, #0056b3, #0099cc); /* Darker gradient on hover */
+    transform: translateY(-3px); /* Slight lift effect */
+    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.5); /* Stronger shadow on hover */
+}
+
+.submit-button:active {
+    transform: translateY(1px); /* Press-down effect */
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2); /* Reduced shadow when clicked */
+}
 
         @media (max-width: 768px) {
             .header-container {
@@ -398,32 +406,49 @@
     </div>
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script>
-        // Load session data on page load
-        window.addEventListener('load', () => {
-            const selectedPlan = sessionStorage.getItem('selectedPlan');
-            const selectedPrice = sessionStorage.getItem('selectedPrice');
-            const mobileNumber = sessionStorage.getItem('mobileNumber');
+<script>
+// Load session data on page load
+window.addEventListener('load', () => {
+    const selectedPlan = sessionStorage.getItem('selectedPlan');
+    const selectedPrice = sessionStorage.getItem('selectedPrice');
+    const mobileNumber = sessionStorage.getItem('mobileNumber');
 
-            if (mobileNumber) {
-                document.querySelector('.prepaid-number').textContent = `prepaid | ${mobileNumber}`;
-            }
-            if (selectedPlan) {
-                document.querySelector('.data-details').textContent = selectedPlan;
-            }
-            if (selectedPrice) {
-                document.querySelector('.amount span:last-child').textContent = selectedPrice;
-            }
-        });
+    if (mobileNumber) {
+        document.querySelector('.prepaid-number').textContent = `prepaid | ${mobileNumber}`;
+    }
+    if (selectedPlan) {
+        // Parse the selectedPlan to extract validity and features
+        const planParts = selectedPlan.split('•').map(part => part.trim()).filter(part => part !== '');
+        const validity = planParts[0] || 'Unknown validity';
+        const features = planParts.slice(1);
 
-        // Validate mobile number
-        function validateMobileNumber(number) {
-            const mobileRegex = /^[6-9]\d{9}$/;
-            return mobileRegex.test(number);
+        // Format the .data-details section
+        // Keep validity and first feature (e.g., "3GB/day") on the same line
+        // Put remaining features on new lines
+        const dataDetailsElement = document.querySelector('.data-details');
+        let dataDetailsContent = validity;
+        if (features.length > 0) {
+            dataDetailsContent += ` • ${features[0]}`; // First feature on the same line
+            if (features.length > 1) {
+                // Add remaining features on new lines
+                dataDetailsContent += '<br><br>' + features.slice(1).map(feature => `• ${feature}`).join('<br><br>');
+            }
         }
+        dataDetailsElement.innerHTML = dataDetailsContent; // Use innerHTML to render <br> tags
+    }
+    if (selectedPrice) {
+        document.querySelector('.amount span:last-child').textContent = selectedPrice;
+    }
+});
 
-        // Process payment with Razorpay
-       function processPayment() {
+// Validate mobile number
+function validateMobileNumber(number) {
+    const mobileRegex = /^[6-9]\d{9}$/;
+    return mobileRegex.test(number);
+}
+
+// Process payment with Razorpay
+function processPayment() {
     const mobileNumber = sessionStorage.getItem('mobileNumber');
     const button = document.getElementById('proceedToPay');
 
@@ -524,46 +549,46 @@
     });
 }
 
-        // Toggle loading state for the button
-        function setLoadingState(button, isLoading) {
-            if (isLoading) {
-                button.disabled = true;
-                button.textContent = 'Processing...';
-            } else {
-                button.disabled = false;
-                button.textContent = 'Proceed to Pay';
+// Toggle loading state for the button
+function setLoadingState(button, isLoading) {
+    if (isLoading) {
+        button.disabled = true;
+        button.textContent = 'Processing...';
+    } else {
+        button.disabled = false;
+        button.textContent = 'Proceed to Pay';
+    }
+}
+
+// Event listeners for navigation and button
+document.addEventListener('DOMContentLoaded', () => {
+    const menuToggle = document.getElementById('mobileMenuBtn');
+    const navbar = document.getElementById('navbar');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginDropdown = document.getElementById('loginDropdown');
+    const proceedButton = document.getElementById('proceedToPay');
+
+    menuToggle.addEventListener('click', () => {
+        navbar.classList.toggle('active');
+    });
+
+    loginBtn.addEventListener('click', () => {
+        loginDropdown.style.display = loginDropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!loginBtn.contains(e.target) && !loginDropdown.contains(e.target)) {
+            loginDropdown.style.display = 'none';
+        }
+        if (window.innerWidth <= 768 && navbar.classList.contains('active')) {
+            if (!navbar.contains(e.target) && !menuToggle.contains(e.target)) {
+                navbar.classList.remove('active');
             }
         }
+    });
 
-        // Event listeners for navigation and button
-        document.addEventListener('DOMContentLoaded', () => {
-            const menuToggle = document.getElementById('mobileMenuBtn');
-            const navbar = document.getElementById('navbar');
-            const loginBtn = document.getElementById('loginBtn');
-            const loginDropdown = document.getElementById('loginDropdown');
-            const proceedButton = document.getElementById('proceedToPay');
-
-            menuToggle.addEventListener('click', () => {
-                navbar.classList.toggle('active');
-            });
-
-            loginBtn.addEventListener('click', () => {
-                loginDropdown.style.display = loginDropdown.style.display === 'block' ? 'none' : 'block';
-            });
-
-            document.addEventListener('click', (e) => {
-                if (!loginBtn.contains(e.target) && !loginDropdown.contains(e.target)) {
-                    loginDropdown.style.display = 'none';
-                }
-                if (window.innerWidth <= 768 && navbar.classList.contains('active')) {
-                    if (!navbar.contains(e.target) && !menuToggle.contains(e.target)) {
-                        navbar.classList.remove('active');
-                    }
-                }
-            });
-
-            proceedButton.addEventListener('click', processPayment);
-        });
-    </script>
+    proceedButton.addEventListener('click', processPayment);
+});
+</script>
 </body>
 </html>
