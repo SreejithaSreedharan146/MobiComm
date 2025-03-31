@@ -323,7 +323,7 @@
         <div class="header-content">
             <div class="logo-container">
                 <div class="logo">
-                    <a href="./MobilePrepaid/index.html"><img src="../Assets/logo-removebg-preview.png" alt="Company Logo"></a>
+                    <a href="../index.html"><img src="../Assets/logo-removebg-preview.png" alt="Company Logo"></a>
                 </div>
                 <span class="company-name">Mobi-comm</span>
             </div>
@@ -383,139 +383,171 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script>
-        AOS.init({
-            duration: 800,
-            once: true
-        });
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+    AOS.init({
+        duration: 800,
+        once: true
+    });
 
-        particlesJS('particles-js', {
-            particles: {
-                number: { value: 50, density: { enable: true, value_area: 800 } },
-                color: { value: '#4361ee' },
-                shape: { type: 'circle', stroke: { width: 0, color: '#000000' } },
-                opacity: { value: 0.5, random: true, anim: { enable: false, speed: 1, opacity_min: 0.1, sync: false } },
-                size: { value: 3, random: true, anim: { enable: false, speed: 40, size_min: 0.1, sync: false } },
-                line_linked: { enable: true, distance: 150, color: '#4361ee', opacity: 0.4, width: 1 },
-                move: { enable: true, speed: 2, direction: 'none', random: false, straight: false, out_mode: 'out', bounce: false }
-            },
-            interactivity: {
-                detect_on: 'canvas',
-                events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
-                modes: { grab: { distance: 400, line_linked: { opacity: 1 } }, bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 }, repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 }, remove: { particles_nb: 2 } }
-            },
-            retina_detect: true
-        });
+    particlesJS('particles-js', {
+        particles: {
+            number: { value: 50, density: { enable: true, value_area: 800 } },
+            color: { value: '#4361ee' },
+            shape: { type: 'circle', stroke: { width: 0, color: '#000000' } },
+            opacity: { value: 0.5, random: true, anim: { enable: false, speed: 1, opacity_min: 0.1, sync: false } },
+            size: { value: 3, random: true, anim: { enable: false, speed: 40, size_min: 0.1, sync: false } },
+            line_linked: { enable: true, distance: 150, color: '#4361ee', opacity: 0.4, width: 1 },
+            move: { enable: true, speed: 2, direction: 'none', random: false, straight: false, out_mode: 'out', bounce: false }
+        },
+        interactivity: {
+            detect_on: 'canvas',
+            events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
+            modes: { grab: { distance: 400, line_linked: { opacity: 1 } }, bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 }, repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 }, remove: { particles_nb: 2 } }
+        },
+        retina_detect: true
+    });
 
-        let otpSent = false;
-        let timerInterval;
-        let generatedOTP = '';
+    let otpSent = false;
+    let timerInterval;
 
-        function generateOTP() {
-            generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-            return generatedOTP;
+    function startOTPTimer() {
+        let timeLeft = 30;
+        const timerDisplay = document.getElementById('otpTimer');
+        const resendButton = document.getElementById('resendOtp');
+
+        clearInterval(timerInterval);
+
+        timerInterval = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timerDisplay.textContent = '';
+                resendButton.style.display = 'block';
+            } else {
+                timerDisplay.textContent = `Resend OTP in ${timeLeft} seconds`;
+                resendButton.style.display = 'none';
+                timeLeft--;
+            }
+        }, 1000);
+    }
+
+    async function sendOTP() {
+        const mobileNumber = document.getElementById('userid').value;
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const mobileRegex = /^[6-9]\d{9}$/;
+        const nameRegex = /^[a-zA-Z\s]{2,50}$/;
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        if (!mobileRegex.test(mobileNumber) || !nameRegex.test(name) || !emailRegex.test(email)) {
+            showErrorModal('Please enter a valid mobile number, name, and email');
+            return;
         }
 
-        function startOTPTimer() {
-            let timeLeft = 30;
-            const timerDisplay = document.getElementById('otpTimer');
-            const resendButton = document.getElementById('resendOtp');
+        try {
+            const response = await fetch('http://127.0.0.1:8082/api/user/send-otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    mobileNumber: mobileNumber,
+                    name: name,
+                    email: email,
+                }),
+            });
 
-            clearInterval(timerInterval);
-
-            timerInterval = setInterval(() => {
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    timerDisplay.textContent = '';
-                    resendButton.style.display = 'block';
-                } else {
-                    timerDisplay.textContent = `Resend OTP in ${timeLeft} seconds`;
-                    resendButton.style.display = 'none';
-                    timeLeft--;
-                }
-            }, 1000);
-        }
-
-        function sendOTP() {
-            const mobileNumber = document.getElementById('userid').value;
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const mobileRegex = /^[6-9]\d{9}$/;
-            const nameRegex = /^[a-zA-Z\s]{2,50}$/;
-            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-            if (!mobileRegex.test(mobileNumber) || !nameRegex.test(name) || !emailRegex.test(email)) {
-                showErrorModal('Please enter a valid mobile number, name, and email');
-                return;
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || `Failed to send OTP: ${response.status} ${response.statusText}`);
             }
 
-            const otp = generateOTP();
-            document.getElementById('otpMessage').textContent = `Your OTP is: ${otp}`;
+            const result = await response.json();
+            document.getElementById('otpMessage').textContent = 'OTP sent to your mobile number.';
             document.getElementById('otpModal').style.display = 'block';
 
             document.getElementById('otpField').style.display = 'block';
             document.getElementById('mainButton').querySelector('.button-text').textContent = 'Verify OTP';
             otpSent = true;
             startOTPTimer();
+        } catch (error) {
+            showErrorModal(error.message);
         }
+    }
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    function handleMainButton() {
+        if (!otpSent) {
+            sendOTP();
+        } else {
+            verifyOTP();
         }
+    }
 
-        function handleMainButton() {
-            if (!otpSent) {
-                sendOTP();
-            } else {
-                verifyOTP();
+    async function verifyOTP() {
+        const enteredOTP = document.getElementById('otp').value;
+        const mobileNumber = document.getElementById('userid').value;
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+
+        try {
+            const response = await fetch('http://127.0.0.1:8082/api/user/verify-otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    mobileNumber: mobileNumber,
+                    otp: enteredOTP,
+                }),
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Failed to verify OTP: ${response.status} ${response.statusText} - ${errorText}`);
             }
+
+            const result = await response.json();
+            // Store user data in localStorage
+            localStorage.setItem('userMobile', mobileNumber);
+            localStorage.setItem('userName', name);
+            localStorage.setItem('userEmail', email);
+            window.location.href = "/Subscriber/user-homepage.html";
+        } catch (error) {
+            showErrorModal('Invalid OTP. Please try again: ' + error.message);
         }
+    }
 
-        function verifyOTP() {
-            const enteredOTP = document.getElementById('otp').value;
-            const mobileNumber = document.getElementById('userid').value;
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
+    function validateMobile() {
+        const mobileInput = document.getElementById('userid').value;
+        const mobileRegex = /^[6-9]\d{9}$/;
+        document.getElementById('userid').style.borderColor = mobileRegex.test(mobileInput) ? 'var(--light-gray)' : 'var(--danger)';
+    }
 
-            if (enteredOTP === generatedOTP) {
-                // Store user data in localStorage
-                localStorage.setItem('userMobile', mobileNumber);
-                localStorage.setItem('userName', name);
-                localStorage.setItem('userEmail', email);
-                window.location.href = "/Subscriber/user-homepage.html";
-            } else {
-                showErrorModal('Invalid OTP. Please try again.');
-            }
-        }
+    function validateName() {
+        const nameInput = document.getElementById('name').value;
+        const nameRegex = /^[a-zA-Z\s]{2,50}$/;
+        document.getElementById('name').style.borderColor = nameRegex.test(nameInput) ? 'var(--light-gray)' : 'var(--danger)';
+    }
 
-        function validateMobile() {
-            const mobileInput = document.getElementById('userid').value;
-            const mobileRegex = /^[6-9]\d{9}$/;
-            document.getElementById('userid').style.borderColor = mobileRegex.test(mobileInput) ? 'var(--light-gray)' : 'var(--danger)';
-        }
+    function validateEmail() {
+        const emailInput = document.getElementById('email').value;
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        document.getElementById('email').style.borderColor = emailRegex.test(emailInput) ? 'var(--light-gray)' : 'var(--danger)';
+    }
 
-        function validateName() {
-            const nameInput = document.getElementById('name').value;
-            const nameRegex = /^[a-zA-Z\s]{2,50}$/;
-            document.getElementById('name').style.borderColor = nameRegex.test(nameInput) ? 'var(--light-gray)' : 'var(--danger)';
-        }
+    function showErrorModal(message) {
+        document.getElementById('errorMessage').textContent = message;
+        document.getElementById('errorModal').style.display = 'block';
+    }
 
-        function validateEmail() {
-            const emailInput = document.getElementById('email').value;
-            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            document.getElementById('email').style.borderColor = emailRegex.test(emailInput) ? 'var(--light-gray)' : 'var(--danger)';
-        }
-
-        function showErrorModal(message) {
-            document.getElementById('errorMessage').textContent = message;
-            document.getElementById('errorModal').style.display = 'block';
-        }
-
-        document.getElementById('closeModal').addEventListener('click', () => closeModal('otpModal'));
-        document.getElementById('otpOkButton').addEventListener('click', () => closeModal('otpModal'));
-        document.getElementById('closeErrorModal').addEventListener('click', () => closeModal('errorModal'));
-        document.getElementById('errorOkButton').addEventListener('click', () => closeModal('errorModal'));
-    </script>
+    document.getElementById('closeModal').addEventListener('click', () => closeModal('otpModal'));
+    document.getElementById('otpOkButton').addEventListener('click', () => closeModal('otpModal'));
+    document.getElementById('closeErrorModal').addEventListener('click', () => closeModal('errorModal'));
+    document.getElementById('errorOkButton').addEventListener('click', () => closeModal('errorModal'));
+</script>
 </body>
 </html>

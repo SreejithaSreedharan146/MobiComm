@@ -428,8 +428,8 @@
 
         <main class="content-area">
             <div class="breadcrumbs">
-                <a href="user-homepage.html"><i class="fas fa-chevron-left"></i></a> 
-                Home <i class="fas fa-chevron-right"></i> View plans
+                <a href="user-homepage.html"> Home </a> 
+                <span>&#47;</span>  View plans
             </div>
 
             <div class="search-container">
@@ -474,46 +474,46 @@
         const sidebar = document.querySelector('.sidebar');
         const menuToggle = document.querySelector('.menu-toggle');
         let currentPlanDetails, currentPrice;
-
-       // Function to fetch plans from the backend
-    async function fetchPlans() {
-        try {
-            console.log('Fetching plans from http://localhost:8082/api/admin/plans...');
-            const response = await fetch('http://localhost:8082/api/admin/plans', {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include'
-            });
-            console.log('Response status:', response.status);
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+    
+        // Function to fetch plans from the backend
+        async function fetchPlans() {
+            try {
+                console.log('Fetching plans from http://localhost:8082/api/admin/plans...');
+                const response = await fetch('http://localhost:8082/api/admin/plans', {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include'
+                });
+                console.log('Response status:', response.status);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const plans = await response.json();
+                console.log('Fetched plans:', plans);
+                return plans.map(plan => ({
+                    price: plan.price,
+                    validity: plan.validity,
+                    features: plan.features
+                        ? plan.features
+                            .split(',')
+                            .map(feature => feature.trim().replace(/[\[\]"]/g, '')) // Remove [ ], ", and trim whitespace
+                        : [],
+                    category: plan.category || 'General',
+                    tags: plan.tags ? plan.tags.split(',') : []
+                }));
+            } catch (error) {
+                console.error('Error fetching plans:', error);
+                plansContainer.innerHTML = '<tr><td colspan="5">Error loading plans. Check console for details.</td></tr>';
+                return [];
             }
-            const plans = await response.json();
-            console.log('Fetched plans:', plans);
-            return plans.map(plan => ({
-                price: plan.price,
-                validity: plan.validity,
-                features: plan.features
-                    ? plan.features
-                        .split(',')
-                        .map(feature => feature.trim().replace(/[\[\]"]/g, '')) // Remove [ ], ", and trim whitespace
-                    : [],
-                category: plan.category || 'General',
-                tags: plan.tags ? plan.tags.split(',') : []
-            }));
-        } catch (error) {
-            console.error('Error fetching plans:', error);
-            plansContainer.innerHTML = '<tr><td colspan="5">Error loading plans. Check console for details.</td></tr>';
-            return [];
         }
-    }
-
+    
         // Function to get query parameter from URL
         function getQueryParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
         }
-
+    
         // Retrieve and display the mobile number from the URL
         function displayMobileNumber() {
             const mobileNumber = getQueryParam('mobile');
@@ -529,25 +529,25 @@
                 }
             }
         }
-
+    
         // Filter plans based on criteria
         async function filterPlans(criteria = {}) {
             const plans = await fetchPlans();
             let filteredPlans = [...plans];
-
+    
             if (criteria.category && criteria.category !== 'all') {
                 filteredPlans = filteredPlans.filter(plan => 
                     plan.category.toLowerCase() === criteria.category.toLowerCase()
                 );
             }
-
+    
             if (criteria.duration && criteria.duration !== 'all') {
                 const duration = parseInt(criteria.duration);
                 filteredPlans = filteredPlans.filter(plan => 
                     plan.validity === duration
                 );
             }
-
+    
             if (criteria.searchTerm) {
                 const searchTerm = criteria.searchTerm.toLowerCase();
                 filteredPlans = filteredPlans.filter(plan => 
@@ -557,47 +557,56 @@
                     (plan.tags && plan.tags.some(tag => tag.toLowerCase().includes(searchTerm)))
                 );
             }
-
+    
             renderPlans(filteredPlans);
         }
-
+    
         // Render plans to the table
-    function renderPlans(filteredPlans) {
-        plansContainer.innerHTML = '';
-
-        if (filteredPlans.length === 0) {
-            plansContainer.innerHTML = '<tr><td colspan="5" class="no-results">No plans found. Try a different filter or search term.</td></tr>';
-            return;
-        }
-
-        filteredPlans.forEach((plan) => {
-            const planRow = document.createElement('tr');
-            planRow.innerHTML = `
-                <td>${plan.category}</td>
-                <td>₹${plan.price}</td>
-                <td>${plan.validity} Days</td>
-                <td>
-                    <ul class="plan-features">
-                        ${plan.features.map(feature => `<li>${feature}</li>`).join('')}
-                    </ul>
-                </td>
-                <td>
-                    <button class="buy-button" data-plan="${encodeURIComponent(`${plan.validity} Days • ${plan.features[0] || 'No features'}`)}" data-price="₹${plan.price}">Buy Now</button>
-                </td>
-            `;
-            plansContainer.appendChild(planRow);
-        });
-
-        // Add event listeners to buy buttons after rendering
-        document.querySelectorAll('.buy-button').forEach(button => {
-            button.addEventListener('click', () => {
-                const planDetails = decodeURIComponent(button.getAttribute('data-plan'));
-                const price = button.getAttribute('data-price');
-                selectPlan(planDetails, price);
+        function renderPlans(filteredPlans) {
+            plansContainer.innerHTML = '';
+    
+            if (filteredPlans.length === 0) {
+                plansContainer.innerHTML = '<tr><td colspan="5" class="no-results">No plans found. Try a different filter or search term.</td></tr>';
+                return;
+            }
+    
+            filteredPlans.forEach((plan) => {
+                const planRow = document.createElement('tr');
+                // Join all features into a single string, separated by " • "
+                const allFeatures = plan.features.length > 0 ? plan.features.join(' • ') : 'No features';
+                planRow.innerHTML = `
+                    <td>${plan.category}</td>
+                    <td>₹${plan.price}</td>
+                    <td>${plan.validity} Days</td>
+                    <td>
+                        <ul class="plan-features">
+                            ${plan.features.map(feature => `<li>${feature}</li>`).join('')}
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="buy-button" data-plan="${encodeURIComponent(`${plan.validity} Days • ${allFeatures}`)}" data-price="₹${plan.price}">Buy Now</button>
+                    </td>
+                `;
+                plansContainer.appendChild(planRow);
             });
-        });
-    }
-
+    
+            // Add event listeners to buy buttons after rendering
+            document.querySelectorAll('.buy-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const planDetails = decodeURIComponent(button.getAttribute('data-plan'));
+                    const price = button.getAttribute('data-price');
+                    selectPlan(planDetails, price);
+                });
+            });
+        }
+    
+        // Handle plan selection
+        function selectPlan(planDetails, price) {
+            currentPlanDetails = planDetails;
+            currentPrice = price;
+            showModal();
+        }
+    
         // Show modal
         function showModal() {
             const modal = document.getElementById('planModal');
@@ -605,66 +614,66 @@
             modalPlanDetails.textContent = currentPlanDetails; // Format as "28 Days • 1.5GB/day"
             modal.style.display = 'flex';
         }
-
+    
         // Close modal
         function closeModal() {
             const modal = document.getElementById('planModal');
             modal.style.display = 'none';
         }
-
+    
         // Confirm plan selection
         function confirmPlanSelection() {
             closeModal();
             console.log('Confirming plan:', { currentPlanDetails, currentPrice });
             const mobileNumber = sessionStorage.getItem('mobileNumber') || prompt('Please enter your mobile number:');
-
+    
             if (!mobileNumber) {
                 alert('Mobile number is required to proceed');
                 console.log('No mobile number provided');
                 return;
             }
-
+    
             const mobileRegex = /^[6-9]\d{9}$/;
             if (!mobileRegex.test(mobileNumber)) {
                 alert('Please enter a valid 10-digit mobile number');
                 console.log('Invalid mobile number:', mobileNumber);
                 return;
             }
-
+    
             sessionStorage.setItem('selectedPlan', currentPlanDetails);
             sessionStorage.setItem('selectedPrice', currentPrice);
             sessionStorage.setItem('mobileNumber', mobileNumber);
             mobileNumberBox.textContent = `Mobile Number: ${mobileNumber}`;
-            console.log('Plan selected, redirecting to user-paymentpage.html');
-
-            const paymentPage = window.location.href.replace('user-rechargepage.html', 'user-paymentpage.html');
+            console.log('Plan selected, redirecting to user-paymentpage2.html');
+    
+            const paymentPage = window.location.href.replace('user-rechargepage2.html', 'user-paymentpage2.html');
             window.location.href = paymentPage;
         }
-
+    
         // Event listeners for filters
         document.querySelectorAll('.filter-btn').forEach(button => {
             button.addEventListener('click', () => {
                 const group = button.closest('.filter-group');
                 group.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
-
+    
                 const category = button.getAttribute('data-category');
                 const duration = button.getAttribute('data-duration');
                 filterPlans({ category, duration });
             });
         });
-
+    
         // Search functionality
         document.querySelector('.search-input').addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase();
             filterPlans({ searchTerm });
         });
-
+    
         // Sidebar toggle
         menuToggle.addEventListener('click', () => {
             sidebar.classList.toggle('active');
         });
-
+    
         document.addEventListener('click', (e) => {
             if (window.innerWidth <= 1024 && sidebar.classList.contains('active')) {
                 if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
@@ -672,7 +681,7 @@
                 }
             }
         });
-
+    
         // Scroll-to-top button
         window.onscroll = function () {
             let btn = document.getElementById("scrollTopBtn");
@@ -682,11 +691,11 @@
                 btn.style.display = "none";
             }
         };
-
+    
         document.getElementById("scrollTopBtn").addEventListener("click", function () {
             window.scrollTo({ top: 0, behavior: "smooth" });
         });
-
+    
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
             displayMobileNumber();

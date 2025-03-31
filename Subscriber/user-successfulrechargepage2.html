@@ -6,22 +6,27 @@
     <title>Recharge Successful - Mobi-Comm</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
         :root {
-            --primary: #1E88E5;
-            --secondary: #2196F3;
-            --light: #F5F8FA;
-            --dark: #212121;
-            --white: #FFFFFF;
-            --gray: #B0BEC5;
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #4cc9f0;
+            --dark: #212529;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --success: #4BB543;
+            --danger: #dc3545;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 12px;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
@@ -32,55 +37,159 @@
             color: var(--dark);
         }
 
-        .header {
-            background: var(--white);
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
             position: fixed;
-            width: 100%;
             top: 0;
+            width: 100%;
             z-index: 1000;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            padding: 15px 20px;
         }
 
         .logo {
-            width: 40px;
-            height: 40px;
-            background: var(--primary);
-            border-radius: 50%;
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
         }
 
-        .company-name {
+        .logo img {
+            height: 50px;
+            margin-right: 10px;
+            background-color: blue;
+            border-radius: 40px;
+        }
+
+        .logo h1 {
             font-size: 1.5rem;
-            font-weight: 500;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 0;
+        }
+
+        .navbar {
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar a {
             color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .navbar a:hover {
+            color: var(--primary);
+        }
+
+        .navbar a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .navbar a:hover::after {
+            width: 100%;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark);
+            cursor: pointer;
+        }
+
+        /* Dropdown Styles */
+        .dropdown-menu {
+            min-width: 150px;
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            z-index: 100;
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 10px 15px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .dropdown-item:hover {
+            background: var(--light-gray);
+            color: var(--primary);
         }
 
         .breadcrumbs {
             font-size: 0.9rem;
             color: var(--gray);
-            margin: 80px 0 1.5rem 20px;
+            margin-top: 100px;
+            margin-left: 25px;
         }
 
         .breadcrumbs a {
@@ -113,6 +222,7 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
+            background-color: var(--success);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -129,10 +239,9 @@
             }
         }
 
-        .success-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
+        .success-icon i {
+            color: white;
+            font-size: 40px;
         }
 
         .success-message {
@@ -165,7 +274,7 @@
         }
 
         .transaction-card {
-            background: var(--white);
+            background: white;
             border-radius: 12px;
             padding: 20px;
             width: 100%;
@@ -244,7 +353,7 @@
         }
 
         .home-button:hover {
-            background: var(--secondary);
+            background: var(--primary-dark);
         }
 
         .toast {
@@ -281,7 +390,7 @@
             display: none;
             position: fixed;
             top: 0;
-            left:  HZ0;
+            left: 0;
             width: 100%;
             height: 100%;
             background-color: rgba(0,0,0,0.5);
@@ -290,7 +399,7 @@
 
         .modal-content {
             position: relative;
-            background-color: var(--white);
+            background-color: white;
             margin: 15% auto;
             padding: 20px;
             width: 90%;
@@ -361,18 +470,37 @@
             }
         }
 
+        /* Responsive Styles */
         @media (max-width: 768px) {
-            .header-content {
-                padding: 10px;
+            .header-container {
+                padding: 15px;
             }
 
-            .logo {
-                width: 32px;
-                height: 32px;
+            .navbar {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 70px);
+                background: white;
+                flex-direction: column;
+                padding: 40px 20px;
+                box-shadow: var(--shadow);
+                transition: left 0.3s;
+                gap: 30px;
             }
 
-            .company-name {
-                font-size: 1rem;
+            .navbar.active {
+                left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .auth-buttons {
+                display: flex;
+                margin-top: 20px;
             }
 
             .success-title {
@@ -394,18 +522,12 @@
         }
 
         @media (max-width: 480px) {
-            .header {
-                padding: 0.5rem;
+            .logo img {
+                height: 40px;
             }
 
-            .logo {
-                width: 30px;
-                height: 30px;
-                font-size: 0.9rem;
-            }
-
-            .company-name {
-                font-size: 1rem;
+            .logo h1 {
+                font-size: 1.2rem;
             }
 
             .success-title {
@@ -435,21 +557,48 @@
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-content">
-            <div class="logo-container">
-                <div class="logo">MC</div>
-                <span class="company-name">Mobi-Comm</span>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="../Assets/logo-removebg-preview.png" alt="Mobi-comm Logo">
+                <h1>Mobi-comm</h1>
             </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav class="navbar" id="navbar">
+                <a href="#recharge">Recharge</a>
+                <a href="plansview.html">Plans & Offers</a>
+                <a href="Help.html">Support</a>
+                <div class="auth-buttons">
+                    <div class="login-container" style="position: relative;">
+                        <button class="btn btn-outline" id="loginBtn">Login</button>
+                        <div id="loginDropdown" class="dropdown-menu">
+                            <a href="./Subscriber/user-loginpage.html" class="dropdown-item">User Login</a>
+                            <a href="./Admin/admin-loginpage.html" class="dropdown-item">Admin Login</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
         </div>
     </header>
+
     <div class="breadcrumbs">
-        <a href="user-paymentpage2.html"><i class="fas fa-chevron-left"></i></a> 
-        Payment Interface <i class="fas fa-chevron-right"></i> Receipt
+        <a href="../user-homepage.html">Home </a> 
+        <span>/</span> 
+        <a href="user-rechargepage2.html" style="text-decoration: none;">View plans</a> 
+        <span>/</span> 
+        <a href="user-paymentpage2.html">Payment Interface</a> 
+        <span>/</span> 
+        Receipt
     </div>
+
     <div class="success-container">
         <div class="success-icon">
-            <img src="C:\Users\FQ5330TU\OneDrive\Desktop\MobilePrepaid\Assets\success_checkmark.png" alt="Success Checkmark">
+            <i class="fas fa-check"></i>
         </div>
 
         <div class="success-message">
@@ -501,6 +650,7 @@
                 Share Receipt
             </button>
         </div>
+
         <div id="shareModal" class="modal">
             <div class="modal-content">
                 <span class="close-button" onclick="closeShareModal()">×</span>
@@ -537,7 +687,7 @@
                 </div>
             </div>
         </div>
-        <a href="user-homepage.html" class="home-button">Back to Home</a>
+        <a href="../index.html" class="home-button">Back to Home</a>
         <div class="floating-bubbles" id="bubbles"></div>
     </div>
 
@@ -551,82 +701,135 @@
             const bubble = document.createElement('div');
             bubble.classList.add('bubble');
 
-            const size = Math.random() * 50 + 20; // Random size between 20px and 70px
+            const size = Math.random() * 50 + 20;
             bubble.style.width = `${size}px`;
             bubble.style.height = `${size}px`;
 
-            bubble.style.left = `${Math.random() * 100}%`; // Random horizontal position
-
-            const animationDuration = Math.random() * 10 + 5; // Random duration between 5s and 15s
+            bubble.style.left = `${Math.random() * 100}%`;
+            const animationDuration = Math.random() * 10 + 5;
             bubble.style.animationDuration = `${animationDuration}s`;
-
-            bubble.style.animationDelay = `${Math.random() * -5}s`; // Random delay
+            bubble.style.animationDelay = `${Math.random() * -5}s`;
 
             bubblesContainer.appendChild(bubble);
         }
 
+        // Format payment method for display
+        function formatPaymentMethod(method) {
+            const methodMap = {
+                'card': 'Credit/Debit Card',
+                'upi': 'UPI',
+                'netbanking': 'Net Banking',
+                'wallet': 'Wallet',
+                'paylater': 'Pay Later'
+            };
+            console.log('Formatting Payment Method - Input:', method); // Debug log
+            const formattedMethod = methodMap[method] || method || 'Unknown';
+            console.log('Formatted Payment Method - Output:', formattedMethod); // Debug log
+            return formattedMethod; // Fallback to raw method or 'Unknown' if undefined
+        }
+
+        // Download PDF
         function downloadPDF() {
             const pdfContainer = document.createElement('div');
-            pdfContainer.style.padding = '20px';
-            pdfContainer.style.maxWidth = '600px';
+            pdfContainer.style.padding = '30px';
+            pdfContainer.style.maxWidth = '800px';
             pdfContainer.style.margin = '0 auto';
-            pdfContainer.style.height = 'auto';
-            pdfContainer.style.overflow = 'visible';
+            pdfContainer.style.background = '#ffffff';
+            pdfContainer.style.fontFamily = 'Arial, sans-serif';
+            pdfContainer.style.lineHeight = '1.5';
 
             const header = document.createElement('div');
-            header.style.textAlign = 'center';
-            header.style.marginBottom = '20px';
-            header.innerHTML = `
-                <h2 style="color: #1E88E5; margin-bottom: 10px; font-size: 24px;">Mobi-Comm</h2>
-                <div style="width: 100%; height: 2px; background: #1E88E5; margin: 10px 0;"></div>
-                <h3 style="color: #1E88E5; margin-top: 10px;">Recharge Receipt</h3>
+            header.style.display = 'flex';
+            header.style.alignItems = 'center';
+            header.style.justifyContent = 'space-between';
+            header.style.borderBottom = '2px solid #4361ee';
+            header.style.paddingBottom = '15px';
+            header.style.marginBottom = '25px';
+
+            const logoText = document.createElement('div');
+            logoText.innerHTML = `
+                <h1 style="color: #4361ee; font-size: 28px; font-weight: bold; margin: 0;">Mobi-Comm</h1>
+                <p style="color: #666; font-size: 12px; margin: 0;">Your Trusted Recharge Partner</p>
             `;
+            header.appendChild(logoText);
+
+            const receiptTitle = document.createElement('div');
+            receiptTitle.innerHTML = `
+                <h2 style="color: #212529; font-size: 20px; font-weight: 600; margin: 0;">Recharge Receipt</h2>
+                <p style="color: #4361ee; font-size: 14px; margin: 0;">Generated on ${new Date().toLocaleDateString()}</p>
+            `;
+            receiptTitle.style.textAlign = 'right';
+            header.appendChild(receiptTitle);
+
             pdfContainer.appendChild(header);
 
             const transactionId = sessionStorage.getItem('transactionId');
             const successMessage = document.createElement('div');
             successMessage.style.textAlign = 'center';
-            successMessage.style.marginBottom = '15px';
+            successMessage.style.marginBottom = '30px';
+            successMessage.style.background = '#e6f3ff';
+            successMessage.style.padding = '15px';
+            successMessage.style.borderRadius = '8px';
             successMessage.innerHTML = `
-                <p style="color: #1E88E5; font-size: 18px; margin-bottom: 5px;">✓ Recharge Successful!</p>
-                <p style="color: #666; margin-bottom: 5px;">Transaction ID: ${transactionId || 'N/A'}</p>
+                <p style="color: #4361ee; font-size: 18px; font-weight: 600; margin: 0;">✓ Recharge Successful!</p>
+                <p style="color: #333; font-size: 14px; margin: 5px 0 0;">Transaction ID: <strong>${transactionId || 'N/A'}</strong></p>
             `;
             pdfContainer.appendChild(successMessage);
 
             const table = document.createElement('table');
             table.style.width = '100%';
             table.style.borderCollapse = 'collapse';
-            table.style.marginTop = '15px';
+            table.style.marginBottom = '25px';
+            table.style.background = '#f8f9fa';
+            table.style.borderRadius = '8px';
+            table.style.boxShadow = '0 2px 5px rgba(0,0,0,0.05)';
 
             const mobileNumber = sessionStorage.getItem('mobileNumber');
             const planDetails = sessionStorage.getItem('planDetails');
             const amount = sessionStorage.getItem('amount');
-            const paymentType = sessionStorage.getItem('type');
+            const rawPaymentMethod = sessionStorage.getItem('paymentMethod');
+            const paymentMethod = formatPaymentMethod(rawPaymentMethod);
             const timestamp = sessionStorage.getItem('timestamp');
 
             const transactionData = [
                 { label: 'Mobile Number', value: mobileNumber },
                 { label: 'Plan Details', value: planDetails },
                 { label: 'Amount', value: amount },
-                { label: 'Payment Method', value: paymentType },
+                { label: 'Payment Method', value: paymentMethod },
                 { label: 'Date & Time', value: timestamp }
             ];
+
+            const headerRow = table.insertRow();
+            headerRow.style.background = '#4361ee';
+            headerRow.style.color = '#ffffff';
+            const labelHeader = headerRow.insertCell(0);
+            const valueHeader = headerRow.insertCell(1);
+            labelHeader.style.padding = '10px';
+            labelHeader.style.fontWeight = 'bold';
+            labelHeader.style.fontSize = '14px';
+            labelHeader.style.width = '40%';
+            valueHeader.style.padding = '10px';
+            valueHeader.style.fontWeight = 'bold';
+            valueHeader.style.fontSize = '14px';
+            labelHeader.textContent = 'Description';
+            valueHeader.textContent = 'Details';
 
             transactionData.forEach(item => {
                 const row = table.insertRow();
                 const labelCell = row.insertCell(0);
                 const valueCell = row.insertCell(1);
 
-                labelCell.style.padding = '8px';
-                labelCell.style.borderBottom = '1px solid #eee';
-                labelCell.style.width = '40%';
-                labelCell.style.color = '#666';
+                labelCell.style.padding = '12px';
+                labelCell.style.borderBottom = '1px solid #e9ecef';
+                labelCell.style.color = '#6c757d';
+                labelCell.style.fontSize = '14px';
                 labelCell.style.textAlign = 'left';
 
-                valueCell.style.padding = '8px';
-                valueCell.style.borderBottom = '1px solid #eee';
-                valueCell.style.color = '#333';
-                valueCell.style.fontWeight = 'bold';
+                valueCell.style.padding = '12px';
+                valueCell.style.borderBottom = '1px solid #e9ecef';
+                valueCell.style.color = '#212529';
+                valueCell.style.fontSize = '14px';
+                valueCell.style.fontWeight = '500';
                 valueCell.style.textAlign = 'left';
 
                 labelCell.textContent = item.label;
@@ -636,22 +839,23 @@
             pdfContainer.appendChild(table);
 
             const footer = document.createElement('div');
-            footer.style.marginTop = '20px';
             footer.style.textAlign = 'center';
-            footer.style.color = '#666';
-            footer.style.fontSize = '11px';
+            footer.style.color = '#6c757d';
+            footer.style.fontSize = '12px';
+            footer.style.borderTop = '1px solid #e9ecef';
+            footer.style.paddingTop = '15px';
             footer.innerHTML = `
-                <p>This is a computer generated receipt and doesn't require signature.</p>
-                <p>For support, contact: support@mobicomm.com</p>
+                <p style="margin: 0;">This is a computer-generated receipt and does not require a signature.</p>
+                <p style="margin: 5px 0 0;">For support, contact: <a href="mailto:support@mobicomm.com" style="color: #4361ee; text-decoration: none;">support@mobicomm.com</a> | Website: <a href="https://www.mobicomm.com" style="color: #4361ee; text-decoration: none;">www.mobicomm.com</a></p>
             `;
             pdfContainer.appendChild(footer);
 
             const opt = {
-                margin: [0.3, 0.3, 0.5, 0.3],
-                filename: `recharge-receipt-${Date.now()}.pdf`,
+                margin: [0.5, 0.5, 0.5, 0.5],
+                filename: `recharge-receipt-${transactionId || Date.now()}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: {
-                    scale: 1.5,
+                    scale: 2,
                     logging: true,
                     letterRendering: true,
                     useCORS: true,
@@ -672,6 +876,7 @@
                 .catch(err => console.error('PDF generation failed:', err));
         }
 
+        // Share options
         function showShareOptions() {
             document.getElementById('shareModal').style.display = 'block';
         }
@@ -709,9 +914,7 @@
             const toast = document.createElement('div');
             toast.className = 'toast';
             toast.textContent = message;
-
             document.body.appendChild(toast);
-
             setTimeout(() => {
                 toast.remove();
             }, 3000);
@@ -720,7 +923,6 @@
         function copyLink() {
             const transactionId = sessionStorage.getItem('transactionId');
             const receiptLink = `Recharge successful! Transaction ID: ${transactionId}`;
-            
             navigator.clipboard.writeText(receiptLink).then(() => {
                 showToast('Link copied to clipboard!');
             }).catch(err => {
@@ -729,26 +931,78 @@
             closeShareModal();
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileNumber = sessionStorage.getItem('mobileNumber');
-            const planDetails = sessionStorage.getItem('planDetails');
-            const amount = sessionStorage.getItem('amount');
-            const paymentType = sessionStorage.getItem('type');
-            const timestamp = sessionStorage.getItem('timestamp');
-            const transactionId = sessionStorage.getItem('transactionId');
+        // Load transaction details on page load
+       // Load transaction details on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileNumber = sessionStorage.getItem('mobileNumber');
+    let planDetails = sessionStorage.getItem('planDetails');
+    const amount = sessionStorage.getItem('amount');
+    const rawPaymentMethod = sessionStorage.getItem('paymentMethod');
+    console.log('Retrieved Payment Method from sessionStorage:', rawPaymentMethod); // Debug log
+    const paymentMethod = formatPaymentMethod(rawPaymentMethod); // Format payment method
+    const timestamp = sessionStorage.getItem('timestamp');
+    const transactionId = sessionStorage.getItem('transactionId');
 
-            document.getElementById('mobileNumber').textContent = mobileNumber;
-            document.getElementById('planDetails').textContent = planDetails;
-            document.getElementById('amount').textContent = amount;
-            document.getElementById('paymentType').textContent = paymentType;
-            document.getElementById('currentDateTime').textContent = timestamp;
-            document.getElementById('transactionId').textContent = transactionId;
+    // Format the planDetails for display
+    const planDetailsElement = document.getElementById('planDetails');
+    if (planDetails) {
+        const planParts = planDetails.split('•').map(part => part.trim()).filter(part => part !== '');
+        const validity = planParts[0] || 'Unknown validity';
+        const features = planParts.slice(1);
 
-            document.querySelector('.share-option.whatsapp').addEventListener('click', shareOnWhatsApp);
-            document.querySelector('.share-option.email').addEventListener('click', shareViaEmail);
-            document.querySelector('.share-option.telegram').addEventListener('click', shareOnTelegram);
-            document.querySelector('.share-option.copy').addEventListener('click', copyLink);
-        });
+        // Keep validity and first feature (e.g., "3GB/day") on the same line
+        // Put remaining features on new lines
+        let formattedPlanDetails = validity;
+        if (features.length > 0) {
+            formattedPlanDetails += ` • ${features[0]}`; // First feature on the same line
+            if (features.length > 1) {
+                // Add remaining features on new lines
+                formattedPlanDetails += '<br>' + features.slice(1).map(feature => `• ${feature}`).join('<br>');
+            }
+        }
+        planDetailsElement.innerHTML = formattedPlanDetails; // Use innerHTML to render <br> tags
+    } else {
+        planDetailsElement.textContent = 'N/A';
+    }
+
+    // Display the remaining data on the page
+    document.getElementById('mobileNumber').textContent = mobileNumber || 'N/A';
+    document.getElementById('amount').textContent = amount || 'N/A';
+    document.getElementById('paymentType').textContent = paymentMethod;
+    document.getElementById('currentDateTime').textContent = timestamp || 'N/A';
+    document.getElementById('transactionId').textContent = transactionId || 'N/A';
+
+    // Event listeners for share options
+    document.querySelector('.share-option.whatsapp').addEventListener('click', shareOnWhatsApp);
+    document.querySelector('.share-option.email').addEventListener('click', shareViaEmail);
+    document.querySelector('.share-option.telegram').addEventListener('click', shareOnTelegram);
+    document.querySelector('.share-option.copy').addEventListener('click', copyLink);
+
+    // Navigation and dropdown event listeners
+    const menuToggle = document.getElementById('mobileMenuBtn');
+    const navbar = document.getElementById('navbar');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginDropdown = document.getElementById('loginDropdown');
+
+    menuToggle.addEventListener('click', () => {
+        navbar.classList.toggle('active');
+    });
+
+    loginBtn.addEventListener('click', () => {
+        loginDropdown.style.display = loginDropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!loginBtn.contains(e.target) && !loginDropdown.contains(e.target)) {
+            loginDropdown.style.display = 'none';
+        }
+        if (window.innerWidth <= 768 && navbar.classList.contains('active')) {
+            if (!navbar.contains(e.target) && !menuToggle.contains(e.target)) {
+                navbar.classList.remove('active');
+            }
+        }
+    });
+});
     </script>
 </body>
 </html>
