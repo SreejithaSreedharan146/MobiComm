@@ -493,43 +493,44 @@ function processPayment() {
 
                 // Verify payment with backend and fetch payment method
                 fetch('http://localhost:8082/api/payment/verify', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        razorpay_order_id: response.razorpay_order_id,
-                        razorpay_payment_id: response.razorpay_payment_id,
-                        razorpay_signature: response.razorpay_signature,
-                        transactionId: data.transactionId
-                    })
-                })
-                .then(verifyResponse => verifyResponse.json())
-                .then(verifyData => {
-                    if (verifyData.message === 'Payment verified successfully') {
-                        // Assuming backend returns paymentMethod in verifyData
-                        const paymentMethod = verifyData.paymentMethod || 'Unknown';
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        razorpay_order_id: response.razorpay_order_id,
+        razorpay_payment_id: response.razorpay_payment_id,
+        razorpay_signature: response.razorpay_signature,
+        transactionId: data.transactionId
+    })
+})
+.then(verifyResponse => verifyResponse.json())
+.then(verifyData => {
+    console.log('Verification Response:', verifyData);
 
-                        // Store transaction details including payment method
-                        sessionStorage.setItem('mobileNumber', mobileNumber);
-                        sessionStorage.setItem('planDetails', planDetails);
-                        sessionStorage.setItem('amount', `₹${amount}`);
-                        sessionStorage.setItem('paymentMethod', paymentMethod);
-                        sessionStorage.setItem('timestamp', new Date().toLocaleString());
-                        sessionStorage.setItem('transactionId', data.transactionId);
+    if (verifyData.message === 'Payment verified successfully') {
+        const paymentMethod = verifyData.paymentMethod || 'Unknown';
+        const expiryDate = verifyData.expiryDate || planDetails.expiryDate || 'Not Available';
 
-                        console.log('Stored Payment Method:', paymentMethod);
-                        window.location.href = "user-successfulrechargepage.html";
-                    } else {
-                        alert(verifyData.message);
-                        setLoadingState(button, false);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error verifying payment:', error);
-                    alert('Error verifying payment');
-                    setLoadingState(button, false);
-                });
+        sessionStorage.setItem('mobileNumber', mobileNumber);
+        sessionStorage.setItem('planDetails', planDetails);
+        sessionStorage.setItem('amount', `₹${amount}`);
+        sessionStorage.setItem('paymentMethod', paymentMethod);
+        sessionStorage.setItem('timestamp', new Date().toLocaleString());
+        sessionStorage.setItem('transactionId', data.transactionId);
+        sessionStorage.setItem('expiryDate', expiryDate);
+
+        console.log('Stored Expiry Date:', expiryDate);
+        window.location.href = "user-successfulrechargepage.html";
+    } else {
+        alert(verifyData.message);
+    }
+})
+.catch(error => {
+    console.error('Error verifying payment:', error);
+    alert('Error verifying payment');
+});
+
             },
             prefill: {
                 contact: mobileNumber
