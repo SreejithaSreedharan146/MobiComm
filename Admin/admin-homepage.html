@@ -1086,7 +1086,22 @@
                     <!-- Subscribers Section -->
                     <div id="subscribers-tab" class="tab-content">
                         <div class="table-container">
-                            <div id="subscriberGrid"></div>
+                            <div id="subscriberGrid">
+                                <!-- This will be populated dynamically, but let's define the expected table structure -->
+                                <table id="subscribers-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Mobile Number</th>
+                                            <th>Name</th>
+                                            <th>Email</th> <!-- Added Email column -->
+                                            <th class="currentVcurrent-plan">Current Plan</th>
+                                            <th class="days-left">Days Left</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
                             <div class="pagination" id="subscriber-pagination"></div>
                         </div>
                     </div>
