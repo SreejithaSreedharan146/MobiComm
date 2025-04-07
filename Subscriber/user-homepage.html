@@ -654,6 +654,10 @@
                                 <span id="userNameDisplay"></span>
                             </div>
                             <div class="dropdown-item">
+                                <i class="fas fa-phone"></i>
+                                <span id="userMobileDropdownDisplay"></span>
+                            </div>
+                            <div class="dropdown-item">
                                 <i class="fas fa-envelope"></i>
                                 <span id="userEmailDisplay"></span>
                             </div>
@@ -667,6 +671,7 @@
                             </div>
                         </div>
                     </div>
+                    
                 </div>
             </div>
             
@@ -840,6 +845,7 @@
 
         // Display user data
         document.getElementById('userMobileDisplay').textContent = `+91 ${userMobile}`;
+        document.getElementById('userMobileDropdownDisplay').textContent = `+91 ${userMobile}`;
         document.getElementById('userNameDisplay').textContent = userName;
         document.getElementById('userEmailDisplay').textContent = userEmail;
 
